@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="templates/layout.xhtml">
+
+    <ui:define name="title">Book</ui:define>
+    <ui:define name="aside">aside</ui:define>
+    <ui:define name="article">
+        <h5>Book</h5>
+        <h:dataTable var="_book" value="#{bookModel.books}" rendered="#{not empty bookModel.books}">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                #{_book.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Title</f:facet>
+                #{_book.title}
+            </h:column>
+        </h:dataTable>
+
+    </ui:define>
+</ui:composition>

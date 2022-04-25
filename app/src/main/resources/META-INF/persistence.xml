@@ -1,0 +1,28 @@
+<persistence version="3.0"
+             xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+             https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+
+    <persistence-unit name="default" transaction-type="JTA">
+        <jta-data-source>java:app/App/MainDs</jta-data-source>
+
+        <!-- Caching is enabled for all entities for Cacheable(true) is specified. -->
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+
+        <properties>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <!-- Create sql script
+            <property name="jakarta.persistence.schema-generation.scripts.action" value="drop-and-create"/>
+            <property name="jakarta.persistence.schema-generation.scripts.create-target" value="create.sql"/>
+            <property name="jakarta.persistence.schema-generation.scripts.drop-target" value="drop.sql"/>
+            -->
+            <property name="eclipselink.ddl-generation.index-foreign-keys" value="true"/>
+            <property name="eclipselink.logging.level" value="INFO"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.target-server" value="Glassfish" />
+        </properties>
+    </persistence-unit>
+
+</persistence>

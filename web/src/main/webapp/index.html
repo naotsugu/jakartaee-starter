@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Index</title>
+    <style type="text/css">
+        body {
+          font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+          font-size: 16px;
+          line-height: 1.5;
+          margin-top: 4em;
+        }
+        h1, h2 {
+          border-bottom: 1px solid #d0d7de; margin-top: 1.5em;
+        }
+        .code {
+          margin: 1em; border-radius: 6px; padding:16px; background-color: #f6f8fa; white-space: pre-line;
+        }
+        table {
+          margin: 1em;
+          width : 95%;
+          border-spacing: 0;
+          border-collapse: collapse;
+        }
+        table tr th,td {
+          margin: 0;
+          border: 1px solid #d0d7de;
+          padding: 6px 13px;
+        }
+        span.snip {
+            padding:3px; border-radius: 6px;background-color: #eff1f3;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <center>
+        <img src="jakarta-ee-logo-color.svg" width="55%">
+    </center>
+    <div id="content" style="display: grid; grid-template-columns: 10em 1fr 10em;">
+        <div></div>
+        <div id="readme">
+            <h1>Jakarta EE Starter</h1>
+            <p>This is a scaffolding application based on Jakarta EE 9.1.</p>
+            <p>When starting a Jakarta EE project, it is time-consuming to build the environment.
+               With this project, you can start your Jakarta EE project immediately.
+               And provide some example application implementations.</p>
+            <p>The application only depends on the Jakarta EE API.</p>
+
+            <h2>Usage</h2>
+            <p>To start the application, execute the following command:</p>
+            <div class="code">$ ./gradlew run</div>
+            <p>This application uses Java17. If not installed, Gradle's toolchain support will automatically install Java17.</p>
+            <p>To exit the application, press <span class="snip">Ctrl + C</span>.<p>
+
+            <h2>Detection of source changes</h2>
+            <p>Once the application is launched, changes to the source code are monitored.
+               Changes to web resources under <span class="snip">web/src/main/webapp</span> are immediately reflected in the application.</p>
+            <p>Changes to the Java code are reflected by updating the archive. Execute the following commands in another terminal.</p>
+            <div class="code">$ ./gradlew war</div>
+            <p>When archive file changes are detected, application is automatically redeployed</p>
+
+            <h2>Using EAR</h2>
+            <p>By default, WAR files are handled.
+               If you want to use the EAR module, change the <span class="snip">settings.gradle.kts</span> file as follows:</p>
+            <div class="code">rootProject.name = "jakartaee-starter"
+                <font color="silver">// include("domain", "app", "web", "dev")</font>
+                include("domain", "app", "web", "ear", "dev")
+            </div>
+            <p>With the above change, EAR files will be handled. However, some CDI examples will no longer work.</p>
+            <p>The EAR module is reflected by the following command:</p>
+            <div class="code">$ ./gradlew ear</div>
+
+
+            <h2>Hello Examples</h2>
+            <p>Some example of Hello World.</p>
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 12em">Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="/web/helloServlet">Hello Servlet</a></td>
+                        <td>Simplest servlet example. See <span class="snip">HelloServlet.java</span></td>
+                    </tr>
+                    <tr>
+                        <td><a href="/web/rs/hello">Hello Resource</a><br/></td>
+                        <td>Simplest JAX-RS example. See <span class="snip">HelloResource.java</span></td>
+                    </tr>
+                    <tr>
+                        <td><a href="/web/rs/hello/ejb">Hello EJB Resource</a></td>
+                        <td>JAX-RS with EJB service example. See <span class="snip">HelloResource.java</span></td>
+                    </tr>
+                    <tr>
+                        <td><a href="/web/rs/hello/cdi">Hello CDI Resource</a></td>
+                        <td>JAX-RS with CDI service example. See <span class="snip">HelloResource.java</span></td>
+                    </tr>
+                </ui:repeat>
+                </tbody>
+            </table>
+
+            <h2>Basic Examples</h2>
+            <p>Some example of basic JavaEE usage.</p>
+            <p>For more information of persistence definition, see <span class="snip">DataSourceInitializer.java</span> and <span class="snip">persistence.xml</span>.</p>
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 12em">Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><a href="/web/example/ejb/customer.xhtml">Simple EJB service</a></td>
+                    <td>Usage of EJB and JSF(html5 friendly markup) with JPA. See <span class="snip">CustomerModel.java</span></td>
+                </tr>
+                <tr>
+                    <td><a href="/web/example/crud/project.xhtml">Simple CDI service</a></td>
+                    <td>Usage of CDI and JSF(ajax and composition template) with JPA. See <span class="snip">ProjectModel.java</span></td>
+                </tr>
+                </ui:repeat>
+                </tbody>
+            </table>
+
+            <h2>Advanced Examples</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 12em">Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><a href="/web/example/websocket/websocket.html">Simple Web Socket</a></td>
+                    <td>Simple WebSocket endpoint example. See <span class="snip">WebSocketEndPoint.java</span></td>
+                </tr>
+                <tr>
+                    <td><a href="/web/example/cdievent/cdievent.xhtml">CDI Event</a></td>
+                    <td>CDI Event example. See <span class="snip">CdiEventService.java</span> <span class="snip">CdiEventObserver.java</span></td>
+                </tr>
+                </ui:repeat>
+                </tbody>
+            </table>
+            <br/><br/><br/>
+        </div>
+        <div></div>
+    </div>
+</div>
+</body>
+</html>

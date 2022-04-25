@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Web Socket</title>
+</head>
+<body>
+
+<h3>Web Socket Example</h3>
+<p>input text echo by web socket server</p>
+<input type="text" id="text"/>
+<br/>
+<p id="msg"></p>
+
+<script>
+const socket = new WebSocket('ws://localhost:8080/web/endpoint');
+socket.addEventListener('open', (event) => console.log('open'));
+socket.addEventListener('close', (event) => console.log('close'));
+
+document.getElementById('text').addEventListener('input', (event) =>
+    socket.send(event.target.value));
+
+socket.addEventListener('message', (event) =>
+    document.getElementById('msg').textContent = event.data);
+</script>
+
+</body>
+</html>

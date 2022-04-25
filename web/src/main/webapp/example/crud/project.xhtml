@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+                template="templates/layout.xhtml">
+
+    <ui:define name="title">Project</ui:define>
+    <ui:define name="content">
+        <h:form id="idForm">
+            <h5>Project</h5>
+            <div class="row mb-3">
+                <div class="col">
+                    <h:outputLabel for="idSearchName" value="Name"/>
+                    <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
+                           id="idSearchName" value="#{projectModel.searchName}"/>
+                    <div class="invalid-feedback">
+                        <h:messages for="idSearchName" errorClass="invalid" />
+                    </div>
+                </div>
+                <div class="col align-self-end">
+                    <h:commandLink value="Search" styleClass="btn btn-primary" actionListener="#{projectModel.search}">
+                        <f:ajax execute="@form" render=":idForm"/>
+                    </h:commandLink>
+                    <h:commandLink value="New" styleClass="btn btn-outline-primary float-end"
+                                   actionListener="#{projectModel.preCreate}"
+                                   p:data-bs-toggle="modal" p:data-bs-target="#idModal">
+                        <f:ajax execute="@form" render=":idModalForm"/>
+                    </h:commandLink>
+                </div>
+            </div>
+
+            <h:dataTable var="_project" value="#{projectModel.projects}" rendered="#{not empty projectModel.projects}"
+                         styleClass="table table-striped table-hover table-sm">
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                    <h:outputText value="#{_project.id}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">State</f:facet>
+                    <h:outputText value="#{_project.state}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    <h:outputText value="#{_project.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Open Date</f:facet>
+                    <h:outputText value="#{_project.openDate}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Close Date</f:facet>
+                    <h:outputText value="#{_project.closeDate}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Note</f:facet>
+                    <h:outputText value="#{_project.note}"/>
+                </h:column>
+                <h:column styleClass="text-end">
+                    <f:facet name="header"></f:facet>
+                    <h:commandLink value="Edit" styleClass="btn btn-outline-primary btn-sm" style="margin-right:5px;"
+                                   actionListener="#{projectModel.select(_project)}" p:data-bs-toggle="modal" p:data-bs-target="#idModal">
+                        <f:ajax render=":idModalForm"/>
+                    </h:commandLink>
+                    <h:commandLink value="Delete" styleClass="btn btn-outline-danger btn-sm"
+                                   actionListener="#{projectModel.delete(_project)}">
+                        <f:ajax render=":idForm"/>
+                    </h:commandLink>
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
+
+        <div id="idModal" class="modal tade" data-bs-backdrop="static" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <h:form id="idModalForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Project</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <h:selectOneMenu value="#{projectModel.selected.state}" styleClass="form-select" >
+                                    <f:selectItems value="#{projectModel.statuses}" />
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="mb-3">
+                                <h:outputLabel for="idName" value="Name" styleClass="form-label"/>
+                                <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
+                                             id="idName" value="#{projectModel.selected.name}"/>
+                                <div class="invalid-feedback">
+                                    <h:messages for="idName" errorClass="invalid" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h:outputLabel for="idOpenDate" value="Open Date" styleClass="form-label"/>
+                                <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
+                                             id="idOpenDate" value="#{projectModel.selected.openDate}">
+                                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                                </h:inputText>
+                                <div class="invalid-feedback">
+                                    <h:messages for="idOpenDate" errorClass="invalid" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h:outputLabel for="idCloseDate" value="Close Date" styleClass="form-label"/>
+                                <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
+                                             id="idCloseDate" value="#{projectModel.selected.closeDate}">
+                                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                                </h:inputText>
+                                <div class="invalid-feedback">
+                                    <h:messages for="idCloseDate" errorClass="invalid" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h:outputLabel for="idNote" value="Note" styleClass="form-label"/>
+                                <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
+                                             id="idNote" value="#{projectModel.selected.note}">
+                                </h:inputText>
+                                <div class="invalid-feedback">
+                                    <h:messages for="idNote" errorClass="invalid" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <h:commandLink value="Save" styleClass="btn btn-primary"
+                                           actionListener="#{projectModel.save}">
+                                <f:ajax execute="@form" render=":idModalForm :idForm" onevent="closeModalIf"/>
+                            </h:commandLink>
+                            <div id="idValidationFailed" value="#{facesContext.validationFailed}"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+        <script>
+            const closeModalIf = data => {
+                if (data.status === 'success') {
+                    if (document.getElementById('idValidationFailed').getAttribute('value') === 'false') {
+                        bootstrap.Modal.getInstance(document.getElementById('idModal')).hide();
+                    }
+                }
+            };
+        </script>
+    </ui:define>
+</ui:composition>
