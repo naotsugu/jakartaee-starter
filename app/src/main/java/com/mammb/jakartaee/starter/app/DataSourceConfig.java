@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * }</pre>
  */
 @DataSourceDefinition(
-    name = DataSourceInitializer.DS_NAME,
+    name = DataSourceConfig.DS_NAME,
     className = "org.h2.jdbcx.JdbcDataSource",
     url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
     initialPoolSize = 3,
@@ -45,11 +45,11 @@ import java.util.logging.Logger;
     })
 @jakarta.ejb.Startup
 @jakarta.ejb.Singleton
-public class DataSourceInitializer {
+public class DataSourceConfig {
 
     public static final String DS_NAME = "java:app/App/MainDs";
 
-    private static final Logger log = Logger.getLogger(DataSourceInitializer.class.getName());
+    private static final Logger log = Logger.getLogger(DataSourceConfig.class.getName());
 
     @Resource(lookup = DS_NAME)
     private DataSource dataSource;
