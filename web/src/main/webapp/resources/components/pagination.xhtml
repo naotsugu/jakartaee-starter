@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+    <cc:interface>
+        <cc:attribute name="page" type="com.mammb.jakartaee.starter.lib.model.PaginationLoadable" required="true" />
+        <cc:attribute name="ajax" type="java.lang.Boolean" default="false" />
+        <cc:attribute name="render" type="java.lang.String" />
+        <cc:attribute name="onevent" type="java.lang.String" default="function(){}"/>
+    </cc:interface>
+
+    <cc:implementation>
+        <div class="row justify-content-end align-items-end">
+            <div class="col">
+            </div>
+            <div class="col-auto">
+                <p class="text-muted">#{cc.attrs.page.getElementsTop()} - #{cc.attrs.page.getElementsBottom()} / #{cc.attrs.page.getTotalElements()}</p>
+            </div>
+            <div class="col-auto">
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item #{cc.attrs.page.isFirstPageEnable() ? '' : 'disabled'}">
+                            <a class="page-link" jsf:action="#{cc.attrs.page.load(0)}"
+                                jsf:disabled="#{not cc.attrs.page.isFirstPageEnable()}"><span>&laquo;</span></a>
+                        </li>
+                        <li class="page-item #{cc.attrs.page.isPervPageEnable() ? '' : 'disabled'}">
+                            <a class="page-link" jsf:action="#{cc.attrs.page.load(cc.attrs.page.getCurrentPage() - 1)}"
+                               jsf:disabled="#{not cc.attrs.page.isPervPageEnable()}"><span><small>&lt;</small></span></a>
+                        </li>
+
+                        <ui:repeat var="_var" value="#{cc.attrs.page.getLinks()}">
+                            <li class="page-item #{cc.attrs.page.getCurrentPage() eq _var ? 'active' : ''}">
+                                <a class="page-link" jsf:action="#{cc.attrs.page.load(_var)}">#{_var + 1}</a>
+                            </li>
+                        </ui:repeat>
+
+                        <li class="page-item #{cc.attrs.page.isNextPageEnable() ? '' : 'disabled'}">
+                            <a class="page-link" jsf:action="#{cc.attrs.page.load(cc.attrs.page.getCurrentPage() + 1)}"
+                               jsf:disabled="#{not cc.attrs.page.isNextPageEnable()}"><span><small>&gt;</small></span></a>
+                        </li>
+                        <li class="page-item #{cc.attrs.page.isLastPageEnable() ? '' : 'disabled'}">
+                            <a class="page-link" jsf:action="#{cc.attrs.page.load(cc.attrs.page.getTotalPages() - 1)}"
+                               jsf:disabled="#{not cc.attrs.page.isLastPageEnable()}"><span>&raquo;</span></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </cc:implementation>
+</html>

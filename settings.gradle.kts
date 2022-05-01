@@ -1,3 +1,3 @@
 rootProject.name = "jakartaee-starter"
-include("domain", "app", "web", "dev")
-//include("domain", "app", "web", "ear", "dev")
+include("lib", "domain", "app", "web", "dev")
+//include("lib", "domain", "app", "web", "ear", "dev")

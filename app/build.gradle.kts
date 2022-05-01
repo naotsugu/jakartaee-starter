@@ -8,6 +8,7 @@ dependencies {
 }
 
 dependencies {
+    api(project(":lib"))
     api(project(":domain"))
 }
 

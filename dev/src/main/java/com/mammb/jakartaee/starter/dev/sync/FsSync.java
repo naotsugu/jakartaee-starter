@@ -63,7 +63,11 @@ public class FsSync implements Consumer<FsEvent> {
 
     static void copy(Path source, Path target) {
         try {
-            Files.copy(source, target);
+            if (Files.isDirectory(source)) {
+                Files.createDirectories(source);
+            } else {
+                Files.copy(source, target);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

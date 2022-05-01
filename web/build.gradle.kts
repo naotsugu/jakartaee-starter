@@ -12,6 +12,8 @@ dependencies {
     } else {
         implementation(project(":app", "archives"))
     }
+    compileOnly(project(":domain"))
+    compileOnly(project(":lib"))
 }
 
 

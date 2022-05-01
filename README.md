@@ -74,9 +74,8 @@ For more information of persistence definition, see `DataSourceInitializer.java`
 |---|--------------------------------------------------------------------------------------------------------------|
 |Simple EJB service| Usage of EJB and JSF(html5 friendly markup) with JPA. See `CustomerModel.java`                               |
 |Simple CDI service| Usage of CDI and JSF(ajax and composition template) with JPA. See `ProjectModel.java`                        |
+|Paging query| Usage of Paging Query library. See `EmployeeModel.java`|
 |Form Authentication| Usage of Security API with `@CustomFormAuthenticationMechanismDefinition` `@DatabaseIdentityStoreDefinition` |
-
-
 
 
 ## Advanced Examples

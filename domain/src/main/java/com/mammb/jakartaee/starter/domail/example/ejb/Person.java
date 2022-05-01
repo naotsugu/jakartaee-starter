@@ -1,12 +1,8 @@
 package com.mammb.jakartaee.starter.domail.example.ejb;
 
 import com.mammb.jakartaee.starter.domail.BaseEntity;
-import com.mammb.jakartaee.starter.domail.repository.SortSpec;
-import com.mammb.jakartaee.starter.domail.repository.Specification;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotEmpty;
-
-import java.util.List;
 
 @MappedSuperclass
 public class Person extends BaseEntity<Person> {
