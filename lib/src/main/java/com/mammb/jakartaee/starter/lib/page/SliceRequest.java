@@ -1,4 +1,7 @@
-package com.mammb.jakartaee.starter.lib.data;
+package com.mammb.jakartaee.starter.lib.page;
+
+import com.mammb.jakartaee.starter.lib.sort.SortSpec;
+import com.mammb.jakartaee.starter.lib.sort.Sortable;
 
 public interface SliceRequest<T> extends SlicePoint, Sortable<T> {
 
@@ -14,15 +17,4 @@ public interface SliceRequest<T> extends SlicePoint, Sortable<T> {
         return new SliceRequestImpl<>(number, 10, sortSpec);
     }
 
-    default SliceRequest<T> with(int number) {
-        return new SliceRequestImpl<>(number, getSize(), getSortSpec());
-    }
-
-    default SliceRequest<T> withSize(int size) {
-        return new SliceRequestImpl<>(getNumber(), size, getSortSpec());
-    }
-
-    default SliceRequest<T> withSort(SortSpec<T> sortSpec) {
-        return new SliceRequestImpl<>(getNumber(), getSize(), sortSpec);
-    }
 }

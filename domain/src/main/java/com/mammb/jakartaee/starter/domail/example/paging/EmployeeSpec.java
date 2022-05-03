@@ -1,7 +1,7 @@
 package com.mammb.jakartaee.starter.domail.example.paging;
 
-import com.mammb.jakartaee.starter.lib.data.SortSpec;
-import com.mammb.jakartaee.starter.lib.data.Specification;
+import com.mammb.jakartaee.starter.lib.sort.SortSpec;
+import com.mammb.jakartaee.starter.lib.criteria.Specification;
 
 public class EmployeeSpec {
 

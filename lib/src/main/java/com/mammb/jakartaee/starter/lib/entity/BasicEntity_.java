@@ -1,15 +1,10 @@
-package com.mammb.jakartaee.starter.lib.data;
+package com.mammb.jakartaee.starter.lib.entity;
 
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
 
 @StaticMetamodel(BasicEntity.class)
-public class BasicEntity_ {
-
+public abstract class BasicEntity_ extends BaseEntity_ {
     public static volatile SingularAttribute<BasicEntity, Long> id;
-    public static volatile SingularAttribute<BasicEntity, Long> version;
-
     public static final String ID = "id";
-    public static final String VERSION = "version";
-
 }

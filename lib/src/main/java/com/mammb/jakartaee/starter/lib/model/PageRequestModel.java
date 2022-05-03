@@ -1,13 +1,13 @@
 package com.mammb.jakartaee.starter.lib.model;
 
-import com.mammb.jakartaee.starter.lib.data.SliceRequest;
-import com.mammb.jakartaee.starter.lib.data.SortSpec;
+import com.mammb.jakartaee.starter.lib.page.SliceRequest;
+import com.mammb.jakartaee.starter.lib.sort.SortSpec;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class PageRequestModel<T> implements SliceRequest<T> {
 
-    @Size
+    @Size(min = 0)
     private int number;
 
     @Size(min = 1)
@@ -15,7 +15,6 @@ public class PageRequestModel<T> implements SliceRequest<T> {
 
     @NotNull
     private SortSpec<T> sortSpec;
-
 
     public PageRequestModel() {
         number = 0;
@@ -30,26 +29,11 @@ public class PageRequestModel<T> implements SliceRequest<T> {
     }
 
     public static <T> PageRequestModel<T> of() {
-        return new PageRequestModel<>(0, 10, SortSpec.empty());
+        return of(SortSpec.empty());
     }
 
     public static <T> PageRequestModel<T> of(SortSpec<T> sortSpec) {
         return new PageRequestModel<>(0, 10, sortSpec);
-    }
-
-    @Override
-    public PageRequestModel<T> with(int number) {
-        return new PageRequestModel<>(number, getSize(), getSortSpec());
-    }
-
-    @Override
-    public PageRequestModel<T> withSize(int size) {
-        return new PageRequestModel<>(getNumber(), size, getSortSpec());
-    }
-
-    @Override
-    public PageRequestModel<T> withSort(SortSpec<T> sortSpec) {
-        return new PageRequestModel<>(getNumber(), getSize(), sortSpec);
     }
 
     @Override

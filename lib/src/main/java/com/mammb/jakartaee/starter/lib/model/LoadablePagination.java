@@ -1,5 +1,5 @@
 package com.mammb.jakartaee.starter.lib.model;
 
-public interface PaginationLoadable extends Pagination {
+public interface LoadablePagination extends Pagination {
     void load(int pageIndex);
 }

@@ -1,6 +1,6 @@
 package com.mammb.jakartaee.starter.lib.repository;
 
-import com.mammb.jakartaee.starter.lib.data.Identifiable;
+import com.mammb.jakartaee.starter.lib.entity.Identifiable;
 
 import java.io.Serializable;
 

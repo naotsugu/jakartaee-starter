@@ -1,5 +1,6 @@
-package com.mammb.jakartaee.starter.lib.data;
+package com.mammb.jakartaee.starter.lib.sort;
 
+import com.mammb.jakartaee.starter.lib.criteria.CriteriaContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Root;
@@ -9,8 +10,7 @@ import java.util.List;
 
 public interface SortContext<T> extends CriteriaContext<T> {
 
-    static <T> SortContext<T> of (
-        Root<T> root, CriteriaBuilder builder) {
+    static <T> SortContext<T> of(Root<T> root, CriteriaBuilder builder) {
 
         return new SortContext<T>() {
 

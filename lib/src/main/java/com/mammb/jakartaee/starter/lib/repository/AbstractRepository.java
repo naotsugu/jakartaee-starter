@@ -1,8 +1,5 @@
 package com.mammb.jakartaee.starter.lib.repository;
 
-import com.mammb.jakartaee.starter.lib.data.EntityContext;
-import jakarta.persistence.EntityManager;
-
 import java.io.Serializable;
 
 public abstract class AbstractRepository<PK extends Serializable, T> implements EntityContext<PK, T> {

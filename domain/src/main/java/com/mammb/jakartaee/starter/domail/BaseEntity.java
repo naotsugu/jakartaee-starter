@@ -7,6 +7,7 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -49,4 +50,5 @@ public abstract class BaseEntity<T> implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

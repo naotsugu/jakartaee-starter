@@ -1,4 +1,4 @@
-package com.mammb.jakartaee.starter.lib.data;
+package com.mammb.jakartaee.starter.lib.entity;
 
 import java.util.Objects;
 

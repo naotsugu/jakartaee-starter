@@ -1,9 +1,8 @@
 package com.mammb.jakartaee.starter.lib.repository;
 
-import com.mammb.jakartaee.starter.lib.data.EntityContext;
-import com.mammb.jakartaee.starter.lib.data.Page;
-import com.mammb.jakartaee.starter.lib.data.SliceRequest;
-import com.mammb.jakartaee.starter.lib.data.Specification;
+import com.mammb.jakartaee.starter.lib.page.Page;
+import com.mammb.jakartaee.starter.lib.page.SliceRequest;
+import com.mammb.jakartaee.starter.lib.criteria.Specification;
 import jakarta.persistence.TypedQuery;
 
 import java.io.Serializable;

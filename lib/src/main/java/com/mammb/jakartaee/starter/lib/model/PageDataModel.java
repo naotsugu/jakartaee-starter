@@ -1,11 +1,11 @@
 package com.mammb.jakartaee.starter.lib.model;
 
-import com.mammb.jakartaee.starter.lib.data.Slice;
+import com.mammb.jakartaee.starter.lib.page.Slice;
 
 import java.util.List;
 import java.util.function.Function;
 
-public class PageDataModel<T> implements PaginationLoadable {
+public class PageDataModel<T> implements LoadablePagination {
 
     private Slice<T> slice;
 

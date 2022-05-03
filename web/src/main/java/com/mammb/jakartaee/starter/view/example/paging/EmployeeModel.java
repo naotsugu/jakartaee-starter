@@ -3,7 +3,7 @@ package com.mammb.jakartaee.starter.view.example.paging;
 import com.mammb.jakartaee.starter.app.example.paging.EmployeeQueryRepository;
 import com.mammb.jakartaee.starter.domail.example.paging.Employee;
 import com.mammb.jakartaee.starter.domail.example.paging.EmployeeSpec;
-import com.mammb.jakartaee.starter.lib.data.Slice;
+import com.mammb.jakartaee.starter.lib.page.Slice;
 import com.mammb.jakartaee.starter.lib.model.PageDataModel;
 import com.mammb.jakartaee.starter.lib.model.PageRequestModel;
 import jakarta.annotation.PostConstruct;

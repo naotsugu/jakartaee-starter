@@ -1,7 +1,7 @@
 package com.mammb.jakartaee.starter.lib.model;
 
-import com.mammb.jakartaee.starter.lib.data.Page;
-import com.mammb.jakartaee.starter.lib.data.Slice;
+import com.mammb.jakartaee.starter.lib.page.Page;
+import com.mammb.jakartaee.starter.lib.page.Slice;
 
 import java.util.List;
 import java.util.Objects;

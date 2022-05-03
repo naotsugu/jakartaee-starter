@@ -1,9 +1,10 @@
-package com.mammb.jakartaee.starter.lib.data;
+package com.mammb.jakartaee.starter.lib.criteria;
 
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.metamodel.SingularAttribute;
 
 public interface EqTrait<T> extends CriteriaContext<T> {
+
     default <T1> Predicate eq(T1 value, SingularAttribute<? super T, T1> attr1) {
         return builder().equal(root().get(attr1), value);
     }

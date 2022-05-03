@@ -1,4 +1,4 @@
-package com.mammb.jakartaee.starter.lib.data;
+package com.mammb.jakartaee.starter.lib.repository;
 
 import jakarta.persistence.EntityManager;
 

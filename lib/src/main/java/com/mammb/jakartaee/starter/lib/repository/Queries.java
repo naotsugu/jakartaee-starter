@@ -1,10 +1,9 @@
 package com.mammb.jakartaee.starter.lib.repository;
 
-import com.mammb.jakartaee.starter.lib.data.Criteria;
-import com.mammb.jakartaee.starter.lib.data.EntityContext;
-import com.mammb.jakartaee.starter.lib.data.SortContext;
-import com.mammb.jakartaee.starter.lib.data.SortSpec;
-import com.mammb.jakartaee.starter.lib.data.Specification;
+import com.mammb.jakartaee.starter.lib.criteria.Criteria;
+import com.mammb.jakartaee.starter.lib.sort.SortContext;
+import com.mammb.jakartaee.starter.lib.sort.SortSpec;
+import com.mammb.jakartaee.starter.lib.criteria.Specification;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

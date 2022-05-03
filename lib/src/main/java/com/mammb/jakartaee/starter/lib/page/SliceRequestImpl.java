@@ -1,4 +1,6 @@
-package com.mammb.jakartaee.starter.lib.data;
+package com.mammb.jakartaee.starter.lib.page;
+
+import com.mammb.jakartaee.starter.lib.sort.SortSpec;
 
 import java.util.Objects;
 

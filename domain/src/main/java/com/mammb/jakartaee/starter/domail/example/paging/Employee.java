@@ -1,6 +1,6 @@
 package com.mammb.jakartaee.starter.domail.example.paging;
 
-import com.mammb.jakartaee.starter.lib.data.BasicEntity;
+import com.mammb.jakartaee.starter.lib.entity.BasicEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 

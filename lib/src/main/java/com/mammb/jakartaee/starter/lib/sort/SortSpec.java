@@ -1,4 +1,4 @@
-package com.mammb.jakartaee.starter.lib.data;
+package com.mammb.jakartaee.starter.lib.sort;
 
 import jakarta.persistence.criteria.Order;
 import java.util.ArrayList;
