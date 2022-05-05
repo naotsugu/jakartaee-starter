@@ -3,7 +3,8 @@ plugins {
 }
 
 dependencies {
-    annotationProcessor("org.hibernate:hibernate-jpamodelgen:6.0.0.Final")
+    //annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen:6.0.0.Final")
+    annotationProcessor(project(":modelgen", "archives"))
     compileOnly("jakarta.platform:jakarta.jakartaee-api")
     implementation(project(":lib"))
 }
