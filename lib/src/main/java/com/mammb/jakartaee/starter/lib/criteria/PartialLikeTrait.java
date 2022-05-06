@@ -2,14 +2,20 @@ package com.mammb.jakartaee.starter.lib.criteria;
 
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.persistence.metamodel.SingularAttribute;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public interface PartialLikeTrait<T> extends CriteriaContext<T> {
 
     default Predicate partialLike(Expression<String> path, String value) {
         return isEmpty(value) ? null : builder().like(path, escapedPattern(value), '\\');
+    }
+
+    default Predicate partialLike(Function<Root<T>, Expression<String>> exp, String value) {
+        return isEmpty(value) ? null : builder().like(exp.apply(root()), escapedPattern(value), '\\');
     }
 
     default Predicate partialLike(SingularAttribute<? super T, String> attr, String value) {

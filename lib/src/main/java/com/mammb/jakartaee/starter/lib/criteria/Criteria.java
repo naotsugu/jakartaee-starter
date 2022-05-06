@@ -11,19 +11,9 @@ import java.util.function.Supplier;
 public interface Criteria<T> extends CriteriaQueryContext<T>,
     EqTrait<T>, LikeTrait<T>, PartialLikeTrait<T> {
 
-    default <R> R on(Class<R> clazz) {
-        try {
-            Class<?>[] types = { Root.class };
-            Constructor<R> constructor = clazz.getConstructor(types);
-            return constructor.newInstance(root());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     static <T> Criteria<T> of(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
-        return new Criteria<T>() {
+        return new Criteria<>() {
 
             @Override
             public Root<T> root() {

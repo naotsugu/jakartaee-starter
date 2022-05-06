@@ -2,9 +2,10 @@ package com.mammb.jakartaee.starter.lib.criteria;
 
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.persistence.metamodel.SingularAttribute;
-
 import java.util.Objects;
+import java.util.function.Function;
 
 public interface EqTrait<T> extends CriteriaContext<T> {
 
@@ -13,10 +14,14 @@ public interface EqTrait<T> extends CriteriaContext<T> {
     }
 
     default <T1> Predicate eq(SingularAttribute<? super T, T1> attr1, T1 value) {
-        return builder().equal(root().get(attr1), value);
+        return isEmpty(value) ? null : builder().equal(root().get(attr1), value);
     }
 
-    static boolean isEmpty(String value) {
-        return Objects.isNull(value) || value.isEmpty();
+    default <T1> Predicate eq(Function<Root<T>, Path<T1>> exp, T1 value) {
+        return isEmpty(value) ? null : builder().equal(exp.apply(root()), value);
+    }
+
+    static boolean isEmpty(Object value) {
+        return Objects.isNull(value) || (value instanceof String str) && str.isEmpty();
     }
 }

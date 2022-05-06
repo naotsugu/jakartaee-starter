@@ -65,8 +65,8 @@
             <p>By default, WAR files are handled.
                If you want to use the EAR module, change the <span class="snip">settings.gradle.kts</span> file as follows:</p>
             <div class="code">rootProject.name = "jakartaee-starter"
-                <font color="silver">// include("domain", "app", "web", "dev")</font>
-                include("domain", "app", "web", "ear", "dev")
+                <font color="silver">// include("domain", "app", "web", "dev", "modelgen")</font>
+                include("domain", "app", "web", "ear", "dev", "modelgen")
             </div>
             <p>With the above change, EAR files will be handled. However, some CDI examples will no longer work.</p>
             <p>The EAR module is reflected by the following command:</p>
