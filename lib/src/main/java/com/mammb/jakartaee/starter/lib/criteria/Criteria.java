@@ -4,12 +4,9 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
-import java.lang.reflect.Constructor;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 public interface Criteria<T> extends CriteriaQueryContext<T>,
-    EqTrait<T>, LikeTrait<T>, PartialLikeTrait<T> {
+    EqTrait<T>, LikeTrait<T>, PartialLikeTrait<T>,
+    GtTrait<T>, LtTrait<T>, BetweenTrait<T> {
 
     static <T> Criteria<T> of(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 

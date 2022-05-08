@@ -2,6 +2,7 @@ package com.mammb.jakartaee.starter.domail.example.paging;
 
 import com.mammb.jakartaee.starter.lib.sort.SortSpec;
 import com.mammb.jakartaee.starter.lib.criteria.Specification;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Root;
 
 public class EmployeeSpec {
@@ -20,7 +21,6 @@ public class EmployeeSpec {
         return ctx -> ctx.desc(root -> on(root).getName());
     }
 
-
     public static Specification<Employee> nameEq(final String name) {
         return ctx -> ctx.eq(root -> on(root).getName(), name);
     }
@@ -35,6 +35,15 @@ public class EmployeeSpec {
 
     private static Employee_Root on(Root<Employee> root) {
         return new Employee_Root(root);
+    }
+
+    // standard way
+    public static Specification<Employee> deptNameEqualsTo(final String name) {
+        return ctx -> {
+            Root<Employee> root = ctx.root();
+            CriteriaBuilder cb = ctx.builder();
+            return cb.equal(root.get(Employee_.department).get(Department_.name), name);
+        };
     }
 
 }

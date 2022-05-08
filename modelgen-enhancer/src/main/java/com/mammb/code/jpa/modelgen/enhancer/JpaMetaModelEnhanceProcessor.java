@@ -61,7 +61,7 @@ public class JpaMetaModelEnhanceProcessor extends AbstractProcessor {
 
 
     protected void createMetaModelClasses(StaticMetamodelEntity entity) {
-        context.logDebug(entity.toString());
+        context.logDebug("Create meta model " + entity.toString());
         new ClassWriter(context, entity).writeFile();
     }
 

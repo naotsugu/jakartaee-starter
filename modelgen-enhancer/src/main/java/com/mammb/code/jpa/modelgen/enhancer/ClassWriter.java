@@ -5,6 +5,7 @@ import javax.tools.FileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Objects;
 
 public class ClassWriter {
@@ -30,36 +31,32 @@ public class ClassWriter {
 
             FileObject fo = context.getProcessingEnvironment().getFiler().createSourceFile(
                 entity.getQualifiedName() + "Root", entity.getElement());
-            PrintWriter pw = new PrintWriter(fo.openOutputStream());
 
-            if (!entity.getPackageName().isEmpty()) {
-                pw.println("package " + entity.getPackageName() + ";");
+            try (PrintWriter pw = new PrintWriter(fo.openOutputStream())) {
+                if (!entity.getPackageName().isEmpty()) {
+                    pw.println("package " + entity.getPackageName() + ";");
+                    pw.println();
+                }
+                pw.println(importer.generateImports());
                 pw.println();
+
+                pw.println(body);
+                pw.flush();
             }
-            pw.println(importer.generateImports());
-            pw.println();
-
-            pw.println(body);
-
-            pw.flush();
-            pw.close();
 
         } catch (FilerException e) {
             context.logError("Problem with Filer: " + e.getMessage());
         } catch (IOException e) {
-            context.logError("Problem opening file to write MetaModel for " + entity.getSimpleName() + ": " + e.getMessage());
+            context.logError("Problem opening file to write MetaModel for " +
+                entity.getSimpleName() + ": " + e.getMessage());
         }
     }
 
 
-    protected StringBuffer generateBody() {
-        var sw = new StringWriter();
-        try (PrintWriter pw = new PrintWriter(sw))  {
-
-            pw.println(generateClassDeclaration());
-
-            return sw.getBuffer();
-        }
+    protected StringBuilder generateBody() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(generateClassDeclaration()).append(System.lineSeparator());
+        return sb;
     }
 
     protected String generateClassDeclaration() {

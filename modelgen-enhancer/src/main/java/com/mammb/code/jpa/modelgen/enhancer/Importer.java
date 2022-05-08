@@ -46,7 +46,9 @@ public class Importer {
             return fqcn;
         }
         var simpleName = simpleName(fqcn);
-        if (!map.containsKey(simpleName)) {
+        if (fqcn.startsWith("java.lang.")) {
+            return simpleName;
+        } else if (!map.containsKey(simpleName)) {
             if (!inPackage(fqcn)) {
                 map.put(simpleName, fqcn);
             }
