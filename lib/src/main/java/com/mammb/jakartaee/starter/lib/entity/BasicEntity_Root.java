@@ -14,13 +14,13 @@ public class BasicEntity_Root extends BaseEntity_Root {
         return ((Root<BasicEntity<?>>) BasicEntity_Root.this.get()).get(BasicEntity_.id);
     }
 
-    public static abstract class Join_ extends BaseEntity_.Join_ {
+    public static abstract class Join_ extends BaseEntity_Root.Join_ {
         public Path<Long> getId() {
             return ((Join<?, BasicEntity<?>>) get()).get(BasicEntity_.id);
         }
     }
 
-    public static abstract class Path_ extends BaseEntity_.Path_ {
+    public static abstract class Path_ extends BaseEntity_Root.Path_ {
         public Path<Long> getId() {
             return ((Path<BasicEntity<?>>) get()).get(BasicEntity_.id);
         }
