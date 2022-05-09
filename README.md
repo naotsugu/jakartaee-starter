@@ -39,8 +39,8 @@ By default, WAR files are handled. If you want to use the EAR module, change the
 
 ```kotlin
 rootProject.name = "jakartaee-starter"
-// include("domain", "app", "web", "dev", "modelgen")
-include("domain", "app", "web", "ear", "dev", "modelgen")
+// include("domain", "app", "web", "dev", "modelgen-enhancer")
+include("domain", "app", "web", "ear", "dev", "modelgen-enhancer")
 ```
 
 With the above change, EAR files will be handled. However, some CDI examples will no longer work.

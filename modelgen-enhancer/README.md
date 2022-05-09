@@ -20,7 +20,7 @@ public static Specification<Employee> deptNameLike(final String name) {
 ```
 
 
-When use the enhanced metamodel, It can be written as follows.
+When use the enhanced metamodel, It can be written as follows :
 
 ```java
 public static Specification<Employee> deptNameLike(final String name) {

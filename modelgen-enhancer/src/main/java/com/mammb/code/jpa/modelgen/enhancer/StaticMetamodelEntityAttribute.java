@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019-2022 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mammb.code.jpa.modelgen.enhancer;
 
 import javax.lang.model.element.Element;
@@ -6,6 +21,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * Representation of static metamodel attributes.
+ *
+ * @author Naotsugu Kobayashi
+ */
 public class StaticMetamodelEntityAttribute {
 
     private final StaticMetamodelEntity entity;
@@ -16,7 +36,7 @@ public class StaticMetamodelEntityAttribute {
     private final String name;
 
 
-    public StaticMetamodelEntityAttribute(StaticMetamodelEntity entity, Element element) {
+    protected StaticMetamodelEntityAttribute(StaticMetamodelEntity entity, Element element) {
         this.entity = entity;
         this.element = element;
         this.attributeType = AttributeType.of(asType(element).asElement().toString());
@@ -25,31 +45,52 @@ public class StaticMetamodelEntityAttribute {
     }
 
 
+    /**
+     * Create a new {@link StaticMetamodelEntityAttribute} instance with the given entity.
+     * @param entity the static metamodel entity
+     * @param element the attribute element
+     * @return static metamodel attribute
+     */
     public static StaticMetamodelEntityAttribute of(StaticMetamodelEntity entity, Element element) {
         return new StaticMetamodelEntityAttribute(entity, element);
     }
 
 
+    /**
+     * Get the attribute type.
+     * e.g. jakarta.persistence.metamodel.SingularAttribute
+     * @return the attribute type
+     */
     public AttributeType getAttributeType() {
-        // e.g jakarta.persistence.metamodel.SingularAttribute
         return attributeType;
     }
 
 
+    /**
+     * Get the type arguments of attribute.
+     * e.g. foo.bar.Customer, java.lang.String
+     * @return the type arguments
+     */
     public List<String> getTypeArguments() {
-        // e.g foo.bar.Customer, java.lang.String
         return typeArguments;
     }
 
+
+    /**
+     * Get the attribute name.
+     * e.g. userName
+     * @return the attribute name
+     */
     public String getName() {
-        // e.g userName
         return name;
     }
 
+
     public boolean isEntityTypeTo() {
         var args = asType(element).getTypeArguments();
-        return entity.getContext().getTypeUtils().asElement(args.get(args.size() - 1))
-            .getAnnotationMirrors().stream()
+        var elm = entity.getContext().getTypeUtils().asElement(args.get(args.size() - 1));
+        if (Objects.isNull(elm)) return false;
+        return elm.getAnnotationMirrors().stream()
             .map(Objects::toString)
             .anyMatch(this::hasEntityAnn);
     }

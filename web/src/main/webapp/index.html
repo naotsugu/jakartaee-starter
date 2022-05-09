@@ -65,8 +65,8 @@
             <p>By default, WAR files are handled.
                If you want to use the EAR module, change the <span class="snip">settings.gradle.kts</span> file as follows:</p>
             <div class="code">rootProject.name = "jakartaee-starter"
-                <font color="silver">// include("domain", "app", "web", "dev", "modelgen")</font>
-                include("domain", "app", "web", "ear", "dev", "modelgen")
+                <font color="silver">// include("domain", "app", "web", "dev", "modelgen-enhancer")</font>
+                include("domain", "app", "web", "ear", "dev", "modelgen-enhancer")
             </div>
             <p>With the above change, EAR files will be handled. However, some CDI examples will no longer work.</p>
             <p>The EAR module is reflected by the following command:</p>
@@ -132,7 +132,7 @@
                 </tbody>
             </table>
 
-            <h2>Advanced Examples</h2>
+            <h2>Misc Examples</h2>
             <table>
                 <thead>
                 <tr>
@@ -148,6 +148,10 @@
                 <tr>
                     <td><a href="/web/example/cdievent/cdievent.xhtml">CDI Event</a></td>
                     <td>CDI Event example. See <span class="snip">CdiEventService.java</span> <span class="snip">CdiEventObserver.java</span></td>
+                </tr>
+                <tr>
+                    <td><a href="/web/example/fileupload/uploadfile.xhtml">File Upload</a></td>
+                    <td>T.B.D</td>
                 </tr>
                 </tbody>
             </table>
