@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:jsf="http://xmlns.jcp.org/jsf">
 
 <h:head>
@@ -17,10 +18,40 @@
 <h:body>
     <div id="container" style="margin: 2em;">
         <div id="content">
-            <h1>Upload File</h1>
+            <h2>Upload File</h2>
             <h:form enctype="multipart/form-data">
-                <h:inputFile id="file" value="#{uploadFileModel.file}"/><br/>
-                <h:commandButton value="Upload" /><br/>
+                <div class="row mb-3">
+                    <div class="col">
+                        <h:inputFile styleClass="form-control" value="#{uploadFileModel.file}"/>
+                    </div>
+                    <div class="col">
+                        <h:commandButton value="Upload" styleClass="btn btn-primary"
+                                         actionListener="#{uploadFileModel.upload}" />
+                    </div>
+                </div>
+                <hr/>
+
+                <h:dataTable var="_var" value="#{uploadFileModel.list}"
+                             styleClass="table table-striped table-hover table-sm">
+                    <h:column>
+                        <f:facet name="header">id</f:facet>
+                        <h:outputText value="#{_var.id}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">name</f:facet>
+                        <h:commandLink actionListener="#{uploadFileModel.download(_var)}">
+                            <h:outputText value="#{_var.name}" />
+                        </h:commandLink>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">mime</f:facet>
+                        <h:outputText value="#{_var.mime}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">size</f:facet>
+                        <h:outputText value="#{_var.size}" />
+                    </h:column>
+                </h:dataTable>
             </h:form>
         </div>
     </div>
