@@ -27,8 +27,11 @@ import javax.tools.Diagnostic;
  */
 public class Context {
 
+    /** Annotation processing environment. */
     private final ProcessingEnvironment pe;
+    /** Mode of debug. */
     private final boolean debug;
+
 
     public Context(ProcessingEnvironment pe) {
         this.pe = pe;
