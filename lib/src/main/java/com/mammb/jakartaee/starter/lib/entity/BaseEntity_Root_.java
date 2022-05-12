@@ -7,11 +7,11 @@ import jakarta.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
-public class BaseEntity_Root implements Supplier<Root<? extends BaseEntity<?, ?>>> {
+public class BaseEntity_Root_ implements Supplier<Root<? extends BaseEntity<?, ?>>> {
 
     private final Root<? extends BaseEntity<?, ?>> root;
 
-    public BaseEntity_Root(Root<? extends BaseEntity<?, ?>> root) {
+    public BaseEntity_Root_(Root<? extends BaseEntity<?, ?>> root) {
         this.root = root;
     }
 
@@ -21,15 +21,15 @@ public class BaseEntity_Root implements Supplier<Root<? extends BaseEntity<?, ?>
     }
 
     public Path<Long> getVersion() {
-        return BaseEntity_Root.this.get().get(BaseEntity_.version);
+        return BaseEntity_Root_.this.get().get(BaseEntity_.version);
     }
 
     public Path<LocalDateTime> getCreatedOn() {
-        return BaseEntity_Root.this.get().get(BaseEntity_.createdOn);
+        return BaseEntity_Root_.this.get().get(BaseEntity_.createdOn);
     }
 
     public Path<LocalDateTime> getLastModifiedOn() {
-        return BaseEntity_Root.this.get().get(BaseEntity_.lastModifiedOn);
+        return BaseEntity_Root_.this.get().get(BaseEntity_.lastModifiedOn);
     }
 
     public static abstract class Join_ implements Supplier<Join<?, ? extends BaseEntity<?, ?>>> {

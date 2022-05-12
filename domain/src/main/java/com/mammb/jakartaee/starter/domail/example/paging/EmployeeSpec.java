@@ -33,8 +33,8 @@ public class EmployeeSpec {
         return ctx -> ctx.like(root -> on(root).getDepartment().getName(), name);
     }
 
-    private static Employee_Root on(Root<Employee> root) {
-        return new Employee_Root(root);
+    private static Employee_Root_ on(Root<Employee> root) {
+        return new Employee_Root_(root);
     }
 
     // standard way

@@ -28,11 +28,16 @@ import java.util.stream.Stream;
  */
 public class StaticMetamodelEntityAttribute {
 
+    /** StaticMetamodelEntity. */
     private final StaticMetamodelEntity entity;
+    /** Static metamodel element. */
     private final Element element;
 
+    /** Attribute type. */
     private final AttributeType attributeType;
+    /** Type arguments. */
     private final List<String> typeArguments;
+    /** Attribute name. */
     private final String name;
 
 
@@ -86,6 +91,10 @@ public class StaticMetamodelEntityAttribute {
     }
 
 
+    /**
+     * Gets whether this attribute refers to an Entity or not.
+     * @return If this attribute refers to an Entity, return {@code true}
+     */
     public boolean isEntityTypeTo() {
         var args = asType(element).getTypeArguments();
         var elm = entity.getContext().getTypeUtils().asElement(args.get(args.size() - 1));
@@ -94,6 +103,7 @@ public class StaticMetamodelEntityAttribute {
             .map(Objects::toString)
             .anyMatch(this::hasEntityAnn);
     }
+
 
     private boolean hasEntityAnn(String str) {
         return Stream.of(

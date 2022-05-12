@@ -49,7 +49,7 @@ public class ClassWriter {
             String body = generateBody().toString();
 
             FileObject fo = context.getProcessingEnvironment().getFiler().createSourceFile(
-                entity.getQualifiedName() + "Root", entity.getElement());
+                entity.getQualifiedName() + "Root_", entity.getElement());
 
             try (PrintWriter pw = new PrintWriter(fo.openOutputStream())) {
                 if (!entity.getPackageName().isEmpty()) {
@@ -84,10 +84,10 @@ public class ClassWriter {
             sb.append("""
                 @SuppressWarnings("unchecked")
                 @Generated(value = "%1$s")
-                public class %2$sRoot implements Supplier<Root<? extends %3$s>> {
+                public class %2$sRoot_ implements Supplier<Root<? extends %3$s>> {
 
                     private final Root<? extends %3$s> root;
-                    public %2$sRoot(Root<? extends %3$s> root) {
+                    public %2$sRoot_(Root<? extends %3$s> root) {
                         this.root = root;
                     }
                     @Override
@@ -103,9 +103,9 @@ public class ClassWriter {
             sb.append("""
                 @SuppressWarnings("unchecked")
                 @Generated(value = "%1$s")
-                public class %2$sRoot extends %3$sRoot {
+                public class %2$sRoot_ extends %3$sRoot_ {
 
-                    public %2$sRoot(Root<? extends %4$s> root) {
+                    public %2$sRoot_(Root<? extends %4$s> root) {
                         super(root);
                     }
                 """.formatted(
@@ -130,17 +130,28 @@ public class ClassWriter {
     protected String generateRootMethod(StaticMetamodelEntityAttribute attribute) {
 
         if (attribute.getAttributeType().isList()) {
-            return """
-                public %2$s_Root.Join_ join%3$s() {
-                    return new %2$s_Root.Join_() {
+            var ret = "";
+            if (attribute.isEntityTypeTo()) {
+                ret = """
+                public %2$s_Root_.Join_ join%3$s() {
+                    return new %2$s_Root_.Join_() {
                         @Override
                         public ListJoin<%1$s, %2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root.this.get()).join(%1$s_.%4$s);
+                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
                         }
                     };
                 }
+
+            """.formatted(
+                    importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
+                    importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
+                    capitalize(attribute.getName()),                      // %3$s
+                    attribute.getName()                                   // %4$s
+                );
+            }
+            return ret + """
                 public Expression<List<%2$s>> get%3$s() {
-                    return ((Root<%1$s>) %1$s_Root.this.get()).get(%1$s_.%4$s);
+                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
                 }
             """.formatted(
                 importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
@@ -150,17 +161,28 @@ public class ClassWriter {
             );
 
         } else if (attribute.getAttributeType().isSet()) {
-            return """
-                public %2$s_Root.Join_ join%3$s() {
-                    return new %2$s_Root.Join_() {
+            var ret = "";
+            if (attribute.isEntityTypeTo()) {
+                ret = """
+                public %2$s_Root_.Join_ join%3$s() {
+                    return new %2$s_Root_.Join_() {
                         @Override
                         public SetJoin<%1$s, %2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root.this.get()).join(%1$s_.%4$s);
+                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
                         }
                     };
                 }
+
+            """.formatted(
+                    importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
+                    importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
+                    capitalize(attribute.getName()),                      // %3$s
+                    attribute.getName()                                   // %4$s
+                );
+            }
+            return ret + """
                 public Expression<Set<%2$s>> get%3$s() {
-                    return ((Root<%1$s>) %1$s_Root.this.get()).get(%1$s_.%4$s);
+                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
                 }
             """.formatted(
                 importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
@@ -170,17 +192,28 @@ public class ClassWriter {
             );
 
         } else if (attribute.getAttributeType().isCollection()) {
-            return """
-                public %2$s_Root.Join_ join%3$s() {
-                    return new %2$s_Root.Join_() {
+            var ret = "";
+            if (attribute.isEntityTypeTo()) {
+                ret = """
+                public %2$s_Root_.Join_ join%3$s() {
+                    return new %2$s_Root_.Join_() {
                         @Override
                         public CollectionJoin<%1$s, %2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root.this.get()).join(%1$s_.%4$s);
+                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
                         }
                     };
                 }
+
+            """.formatted(
+                    importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
+                    importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
+                    capitalize(attribute.getName()),                      // %3$s
+                    attribute.getName()                                   // %4$s
+                );
+            }
+            return ret + """
                 public Expression<Collection<%2$s>> get%3$s() {
-                    return ((Root<%1$s>) %1$s_Root.this.get()).get(%1$s_.%4$s);
+                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
                 }
             """.formatted(
                 importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
@@ -190,17 +223,29 @@ public class ClassWriter {
             );
 
         } else if (attribute.getAttributeType().isMap()) {
-            return """
-                public %3$s_Root.Join_ join%4$s() {
-                    return new %3$s_Root.Join_() {
+            var ret = "";
+            if (attribute.isEntityTypeTo()) {
+                ret = """
+                public %3$s_Root_.Join_ join%4$s() {
+                    return new %3$s_Root_.Join_() {
                         @Override
                         public MapJoin<%1$s, %2$s, %3$s> get() {
-                            return ((Root<%1$s>) %1$s_Root.this.get()).join(%1$s_.%5$s);
+                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%5$s);
                         }
                     };
                 }
+
+            """.formatted(
+                    importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
+                    importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
+                    importer.apply(attribute.getTypeArguments().get(2)),  // %3$s
+                    capitalize(attribute.getName()),                      // %4$s
+                    attribute.getName()                                   // %5$s
+                );
+            }
+            return ret + """
                 public Expression<Map<%2$s, %3$s>> get%4$s() {
-                    return ((Root<%1$s>) %1$s_Root.this.get()).get(%1$s_.%5$s);
+                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%5$s);
                 }
             """.formatted(
                 importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
@@ -212,19 +257,19 @@ public class ClassWriter {
 
         } else if (attribute.getAttributeType().isSingular() && attribute.isEntityTypeTo()) {
             return """
-                public %2$s_Root.Join_ join%3$s() {
-                    return new %2$s_Root.Join_() {
+                public %2$s_Root_.Join_ join%3$s() {
+                    return new %2$s_Root_.Join_() {
                         @Override
                         public Join<%1$s, %2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root.this.get()).join(%1$s_.%4$s);
+                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
                         }
                     };
                 }
-                public %2$s_Root.Path_ get%3$s() {
-                    return new %2$s_Root.Path_() {
+                public %2$s_Root_.Path_ get%3$s() {
+                    return new %2$s_Root_.Path_() {
                         @Override
                         public Path<%2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root.this.get()).get(%1$s_.%4$s);
+                            return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
                         }
                     };
                 }
@@ -238,7 +283,7 @@ public class ClassWriter {
         } else if (attribute.getAttributeType().isSingular()) {
             return """
                 public Path<%2$s> get%3$s() {
-                    return ((Root<%1$s>) %1$s_Root.this.get()).get(%1$s_.%4$s);
+                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
                 }
             """.formatted(
                 importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
@@ -264,7 +309,7 @@ public class ClassWriter {
             ));
         } else {
             sb.append("""
-                    public static abstract class Join_ extends %1$sRoot.Join_ {
+                    public static abstract class Join_ extends %1$sRoot_.Join_ {
                 """.formatted(
                     entity.getSuperClass()        // %1$s
             ));
@@ -379,7 +424,7 @@ public class ClassWriter {
             ));
         } else {
             sb.append("""
-                    public static abstract class Path_ extends %1$sRoot.Path_ {
+                    public static abstract class Path_ extends %1$sRoot_.Path_ {
                 """.formatted(
                     entity.getSuperClass()        // %1$s
             ));
