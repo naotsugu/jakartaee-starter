@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mammb.code.jpa.modelgen.enhancer;
+package com.mammb.code.jpa.modelgen.fluent;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.util.Elements;

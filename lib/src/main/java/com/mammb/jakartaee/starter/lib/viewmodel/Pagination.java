@@ -1,4 +1,4 @@
-package com.mammb.jakartaee.starter.lib.model;
+package com.mammb.jakartaee.starter.lib.viewmodel;
 
 import com.mammb.jakartaee.starter.lib.page.Page;
 import com.mammb.jakartaee.starter.lib.page.Slice;

@@ -5,7 +5,7 @@ import com.mammb.jakartaee.starter.lib.criteria.Specification;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Root;
 
-public class EmployeeSpec {
+public abstract class EmployeeSpec {
 
     public static SortSpec<Employee> idAsc() {
         return ctx -> ctx.asc(root -> on(root).getId());

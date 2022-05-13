@@ -1,4 +1,4 @@
-package com.mammb.jakartaee.starter.lib.model;
+package com.mammb.jakartaee.starter.lib.viewmodel;
 
 import com.mammb.jakartaee.starter.lib.page.SliceRequest;
 import com.mammb.jakartaee.starter.lib.sort.SortSpec;

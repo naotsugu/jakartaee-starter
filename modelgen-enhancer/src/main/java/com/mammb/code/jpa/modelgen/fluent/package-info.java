@@ -17,4 +17,4 @@
 /**
  * The main package of this annotation processor.
  */
-package com.mammb.code.jpa.modelgen.enhancer;
+package com.mammb.code.jpa.modelgen.fluent;
