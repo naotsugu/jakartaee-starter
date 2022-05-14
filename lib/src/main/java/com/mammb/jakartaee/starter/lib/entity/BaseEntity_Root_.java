@@ -34,6 +34,9 @@ public class BaseEntity_Root_ implements Supplier<Root<? extends BaseEntity<?, ?
 
     public static abstract class Join_ implements Supplier<Join<?, ? extends BaseEntity<?, ?>>> {
 
+        @Override
+        public abstract Join<?, ? extends BaseEntity<?, ?>> get();
+
         public Path<Long> getVersion() {
             return get().get(BaseEntity_.version);
         }
@@ -49,6 +52,9 @@ public class BaseEntity_Root_ implements Supplier<Root<? extends BaseEntity<?, ?
     }
 
     public static abstract class Path_ implements Supplier<Path<? extends BaseEntity<?, ?>>> {
+
+        @Override
+        public abstract Path<? extends BaseEntity<?, ?>> get();
 
         public Path<Long> getVersion() {
             return get().get(BaseEntity_.version);

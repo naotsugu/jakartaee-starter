@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 public interface ExistsTrait<T> extends CriteriaQueryContext<T> {
 
@@ -19,6 +20,11 @@ public interface ExistsTrait<T> extends CriteriaQueryContext<T> {
         return Objects.isNull(predicate) ? null : builder().exists(subquery.where(predicate));
     }
 
-
+    default <U> Predicate exists(Class<U> ent, Function<Root<U>, Predicate> exp) {
+        Subquery<U> subquery = query().subquery(ent);
+        Root<U> correlateRoot = subquery.from(ent);
+        Predicate predicate = exp.apply(correlateRoot);
+        return Objects.isNull(predicate) ? null : builder().exists(subquery.where(predicate));
+    }
 
 }

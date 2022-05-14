@@ -15,14 +15,22 @@ public class BasicEntity_Root_ extends BaseEntity_Root_ {
     }
 
     public static abstract class Join_ extends BaseEntity_Root_.Join_ {
+
+        @Override
+        public abstract Join<?, ? extends BasicEntity<?>> get();
+
         public Path<Long> getId() {
-            return ((Join<?, BasicEntity<?>>) get()).get(BasicEntity_.id);
+            return get().get(BasicEntity_.id);
         }
     }
 
     public static abstract class Path_ extends BaseEntity_Root_.Path_ {
+
+        @Override
+        public abstract Path<? extends BasicEntity<?>> get();
+
         public Path<Long> getId() {
-            return ((Path<BasicEntity<?>>) get()).get(BasicEntity_.id);
+            return get().get(BasicEntity_.id);
         }
     }
 

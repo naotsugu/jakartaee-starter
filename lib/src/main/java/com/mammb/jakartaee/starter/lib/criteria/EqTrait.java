@@ -1,5 +1,6 @@
 package com.mammb.jakartaee.starter.lib.criteria;
 
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -17,8 +18,12 @@ public interface EqTrait<T> extends CriteriaContext<T> {
         return isEmpty(value) ? null : builder().equal(root().get(attr1), value);
     }
 
-    default <T1> Predicate eq(Function<Root<T>, Path<T1>> exp, T1 value) {
+    default <T1> Predicate eq(Function<Root<T>, Path<? extends T1>> exp, T1 value) {
         return isEmpty(value) ? null : builder().equal(exp.apply(root()), value);
+    }
+
+    default Predicate eq(Expression<?> x, Expression<?> y) {
+        return (isEmpty(x) || isEmpty(y)) ? null : builder().equal(x, y);
     }
 
     static boolean isEmpty(Object value) {

@@ -11,6 +11,11 @@ public abstract class IssueSpec {
         return ctx -> ctx.partialLike(root -> on(root).getTitle(), title);
     }
 
+    public static Specification<Issue> projectNameEq(final Project project) {
+        return ctx -> ctx.eq(root -> on(root).getProject().get(), project);
+    }
+
+
     public static Specification<Issue> projectNameEq(final String name) {
         return ctx -> ctx.eq(root -> on(root).getProject().getName(), name);
     }

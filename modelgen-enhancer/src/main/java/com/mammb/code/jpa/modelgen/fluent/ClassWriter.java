@@ -304,14 +304,23 @@ public class ClassWriter {
         if (Objects.isNull(entity.getSuperClass())) {
             sb.append("""
                     public static abstract class Join_ implements Supplier<Join<?, ? extends %1$s>> {
+
+                        @Override
+                        public abstract Join<?, ? extends %1$s> get();
+
                 """.formatted(
                     entity.getTargetEntityName()  // %1$s
             ));
         } else {
             sb.append("""
-                    public static abstract class Join_ extends %1$sRoot_.Join_ {
+                    public static abstract class Join_ extends %2$sRoot_.Join_ {
+
+                        @Override
+                        public abstract Join<?, ? extends %1$s> get();
+
                 """.formatted(
-                    entity.getSuperClass()        // %1$s
+                    entity.getTargetEntityName(), // %1$s
+                    entity.getSuperClass()        // %2$s
             ));
         }
         entity.getAttributes().forEach(attr -> sb.append(generateJoinMethod(attr)));
@@ -419,14 +428,23 @@ public class ClassWriter {
         if (Objects.isNull(entity.getSuperClass())) {
             sb.append("""
                     public static abstract class Path_ implements Supplier<Path<? extends %1$s>> {
+
+                        @Override
+                        public abstract Path<? extends %1$s> get();
+
                 """.formatted(
                     entity.getTargetEntityName()  // %1$s
             ));
         } else {
             sb.append("""
-                    public static abstract class Path_ extends %1$sRoot_.Path_ {
+                    public static abstract class Path_ extends %2$sRoot_.Path_ {
+
+                        @Override
+                        public abstract Path<? extends %1$s> get();
+
                 """.formatted(
-                    entity.getSuperClass()        // %1$s
+                    entity.getTargetEntityName(), // %1$s
+                    entity.getSuperClass()        // %2$s
             ));
         }
         entity.getAttributes().forEach(attr -> sb.append(generatePathMethod(attr)));
