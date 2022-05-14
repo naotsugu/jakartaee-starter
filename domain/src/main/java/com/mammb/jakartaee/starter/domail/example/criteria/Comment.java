@@ -5,11 +5,16 @@ import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
 
-@Entity
+import static com.mammb.jakartaee.starter.domail.example.criteria.Comment.NAME;
+
+@Entity(name = NAME)
 public class Comment extends BasicEntity<Comment> {
+
+    public static final String NAME = "COMMENTS";
+
     private String commentedBy;
     private LocalDateTime commentedOn;
-    private String value;
+    private String content;
 
     public String getCommentedBy() {
         return commentedBy;
@@ -27,11 +32,11 @@ public class Comment extends BasicEntity<Comment> {
         this.commentedOn = commentedOn;
     }
 
-    public String getValue() {
-        return value;
+    public String getContent() {
+        return content;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setContent(String content) {
+        this.content = content;
     }
 }

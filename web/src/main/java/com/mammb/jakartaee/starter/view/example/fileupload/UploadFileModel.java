@@ -39,7 +39,6 @@ public class UploadFileModel implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        log.info("#### @PostConstruct");
         this.list = service.list();
     }
 

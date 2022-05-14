@@ -100,15 +100,18 @@ public class EmbeddedFish {
         }
     }
 
+
     public Path appRoot() {
         return appRoot(instanceRoot);
     }
+
 
     public Path webAppRoot() {
         return deployedSource.toString().endsWith(".ear")
                 ? appRoot().resolve("applications/" + appName + "/web_war/")
                 : appRoot().resolve("applications/" + appName + "/");
     }
+
 
     public void runCommand(String command, String... args) throws Exception {
         var commandRunner = glassFish.getCommandRunner();
@@ -117,9 +120,11 @@ public class EmbeddedFish {
         log.info("#### Output : " + result.getOutput());
     }
 
+
     private static BootstrapProperties bootstrapProperties() {
         return new BootstrapProperties();
     }
+
 
     private static GlassFishProperties glassFishProperties(Path instanceRoot, int port) {
         var properties = new GlassFishProperties();
@@ -128,6 +133,7 @@ public class EmbeddedFish {
         properties.setProperty("glassfish.embedded.tmpdir", instanceRoot.toString());
         return properties;
     }
+
 
     private static void deleteRecursively(Path pathToBeDelete) throws IOException {
         Files.walk(pathToBeDelete)
@@ -147,4 +153,5 @@ public class EmbeddedFish {
                 .findFirst()
                 .orElseThrow();
     }
+
 }

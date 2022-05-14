@@ -3,7 +3,6 @@ package com.mammb.jakartaee.starter.dev.server;
 import com.mammb.jakartaee.starter.dev.sync.ArchiveSync;
 import com.mammb.jakartaee.starter.dev.sync.FsSync;
 import com.mammb.jakartaee.starter.dev.sync.SyncService;
-
 import java.awt.Desktop;
 import java.net.URI;
 import java.nio.file.Path;
