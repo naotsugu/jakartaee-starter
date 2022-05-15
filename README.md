@@ -1,3 +1,6 @@
+
+![jakarta-ee-starter](doc/images/jakarta-ee-starter-logo.svg)
+
 # Jakarta EE Starter
 
 This is a scaffolding application based on Jakarta EE 9.1.
