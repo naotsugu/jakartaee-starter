@@ -20,12 +20,12 @@ $ ./gradlew run
 
 This application uses Java17. If not installed, Gradle's toolchain support will automatically install Java17.
 
-To exit the application, press Ctrl + C.
+To exit the application, press `Ctrl + C`.
 
 
 ## Detection of source changes
 
-Once the application is launched, changes to the source code are monitored. Changes to web resources under web/src/main/webapp are immediately reflected in the application.
+Once the application is launched, changes to the source code are monitored. Changes to web resources under `web/src/main/webapp` are immediately reflected in the application.
 
 Changes to the Java code are reflected by updating the archive. Execute the following commands in another terminal.
 
@@ -38,7 +38,7 @@ When archive file changes are detected, application is automatically redeployed
 
 ## Using EAR
 
-By default, WAR files are handled. If you want to use the EAR module, change the settings.gradle.kts file as follows:
+By default, WAR files are handled. If you want to use the EAR module, change the `settings.gradle.kts` file as follows:
 
 ```kotlin
 rootProject.name = "jakartaee-starter"
