@@ -6,6 +6,7 @@ import com.mammb.jakartaee.starter.dev.sync.SyncService;
 import java.awt.Desktop;
 import java.net.URI;
 import java.nio.file.Path;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class Main {
@@ -16,6 +17,10 @@ public class Main {
 
 
     public static void main(String[] args) throws Exception {
+
+        LogManager.getLogManager().readConfiguration(
+            Main.class.getResourceAsStream("/conf/logging.properties"));
+
         var fish = EmbeddedFish.of();
         fish.start();
         Runtime.getRuntime().addShutdownHook(new Thread(fish::stop));

@@ -2,8 +2,6 @@ package com.mammb.jakartaee.starter.app.example.cdievent;
 
 import com.mammb.jakartaee.starter.domail.example.cdievent.CdiEventLog;
 import com.mammb.jakartaee.starter.domail.example.cdievent.CdiEventLog_;
-import com.mammb.jakartaee.starter.domail.example.crud.Project_;
-import com.mammb.jakartaee.starter.domail.example.ejb.Customer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -12,7 +10,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

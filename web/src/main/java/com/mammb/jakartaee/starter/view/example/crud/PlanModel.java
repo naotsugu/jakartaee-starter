@@ -1,8 +1,8 @@
 package com.mammb.jakartaee.starter.view.example.crud;
 
-import com.mammb.jakartaee.starter.app.example.crud.ProjectService;
-import com.mammb.jakartaee.starter.domail.example.crud.Project;
-import com.mammb.jakartaee.starter.domail.example.crud.ProjectState;
+import com.mammb.jakartaee.starter.app.example.crud.PlanService;
+import com.mammb.jakartaee.starter.domail.example.crud.Plan;
+import com.mammb.jakartaee.starter.domail.example.crud.PlanState;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -16,36 +16,36 @@ import java.util.logging.Logger;
 
 @Named
 @ViewScoped
-public class ProjectModel implements Serializable {
+public class PlanModel implements Serializable {
 
-    private static final Logger log = Logger.getLogger(ProjectModel.class.getName());
+    private static final Logger log = Logger.getLogger(PlanModel.class.getName());
 
     @Inject
-    private ProjectService service;
+    private PlanService service;
 
     @Inject
     private FacesContext facesContext;
 
     private String searchName;
 
-    private List<Project> projects;
+    private List<Plan> plans;
 
-    private Project selected;
+    private Plan selected;
 
 
     @PostConstruct
     public void postConstruct() {
         log.info("#### @PostConstruct");
         this.searchName = "";
-        this.projects = service.findAll("");
-        this.selected = new Project();
+        this.plans = service.findAll("");
+        this.selected = new Plan();
     }
 
     public void search() {
-        this.projects = service.findAll(this.searchName);
+        this.plans = service.findAll(this.searchName);
     }
 
-    public void select(Project selected) {
+    public void select(Plan selected) {
         this.selected = selected;
     }
 
@@ -58,11 +58,11 @@ public class ProjectModel implements Serializable {
 
         FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Saved!", "Save successful");
         facesContext.addMessage(null, m);
-        this.selected = new Project();
+        this.selected = new Plan();
         search();
     }
 
-    public void delete(Project selected) {
+    public void delete(Plan selected) {
         service.delete(selected);
         FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Deleted!", "Delete successful");
         facesContext.addMessage(null, m);
@@ -70,11 +70,11 @@ public class ProjectModel implements Serializable {
     }
 
     public void preCreate() {
-        this.selected = new Project();
+        this.selected = new Plan();
     }
 
-    public ProjectState[] getStatuses() {
-        return ProjectState.values();
+    public PlanState[] getStatuses() {
+        return PlanState.values();
     }
 
 
@@ -86,11 +86,11 @@ public class ProjectModel implements Serializable {
         this.searchName = searchName;
     }
 
-    public List<Project> getProjects() {
-        return projects;
+    public List<Plan> getPlans() {
+        return plans;
     }
 
-    public Project getSelected() {
+    public Plan getSelected() {
         return selected;
     }
 

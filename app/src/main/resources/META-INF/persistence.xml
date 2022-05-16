@@ -18,7 +18,7 @@
             <property name="jakarta.persistence.schema-generation.scripts.drop-target" value="drop.sql"/>
             -->
             <property name="eclipselink.ddl-generation.index-foreign-keys" value="true"/>
-            <property name="eclipselink.logging.level" value="INFO"/>
+            <property name="eclipselink.logging.level" value="FINE"/>
             <property name="eclipselink.logging.level.sql" value="FINE"/>
             <property name="eclipselink.logging.parameters" value="true"/>
             <property name="eclipselink.target-server" value="Glassfish" />

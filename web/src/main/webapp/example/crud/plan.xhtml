@@ -7,65 +7,65 @@
                 xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
                 template="templates/layout.xhtml">
 
-    <ui:define name="title">Project</ui:define>
+    <ui:define name="title">Plan</ui:define>
     <ui:define name="content">
         <h:form id="idForm">
-            <h5>Project</h5>
+            <h5>Plan</h5>
             <div class="row mb-3">
                 <div class="col">
                     <h:outputLabel for="idSearchName" value="Name"/>
                     <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
-                           id="idSearchName" value="#{projectModel.searchName}"/>
+                           id="idSearchName" value="#{planModel.searchName}"/>
                     <div class="invalid-feedback">
                         <h:messages for="idSearchName" errorClass="invalid" />
                     </div>
                 </div>
                 <div class="col align-self-end">
-                    <h:commandLink value="Search" styleClass="btn btn-primary" actionListener="#{projectModel.search}">
+                    <h:commandLink value="Search" styleClass="btn btn-primary" actionListener="#{planModel.search}">
                         <f:ajax execute="@form" render=":idForm"/>
                     </h:commandLink>
                     <h:commandLink value="New" styleClass="btn btn-outline-primary float-end"
-                                   actionListener="#{projectModel.preCreate}"
+                                   actionListener="#{planModel.preCreate}"
                                    p:data-bs-toggle="modal" p:data-bs-target="#idModal">
                         <f:ajax execute="@form" render=":idModalForm"/>
                     </h:commandLink>
                 </div>
             </div>
 
-            <h:dataTable var="_project" value="#{projectModel.projects}" rendered="#{not empty projectModel.projects}"
+            <h:dataTable var="_plan" value="#{planModel.plans}" rendered="#{not empty planModel.plans}"
                          styleClass="table table-striped table-hover table-sm">
                 <h:column>
                     <f:facet name="header">Id</f:facet>
-                    <h:outputText value="#{_project.id}"/>
+                    <h:outputText value="#{_plan.id}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">State</f:facet>
-                    <h:outputText value="#{_project.state}"/>
+                    <h:outputText value="#{_plan.state}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Name</f:facet>
-                    <h:outputText value="#{_project.name}"/>
+                    <h:outputText value="#{_plan.name}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Open Date</f:facet>
-                    <h:outputText value="#{_project.openDate}"/>
+                    <h:outputText value="#{_plan.openDate}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Close Date</f:facet>
-                    <h:outputText value="#{_project.closeDate}"/>
+                    <h:outputText value="#{_plan.closeDate}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Note</f:facet>
-                    <h:outputText value="#{_project.note}"/>
+                    <h:outputText value="#{_plan.note}"/>
                 </h:column>
                 <h:column styleClass="text-end">
                     <f:facet name="header"></f:facet>
                     <h:commandLink value="Edit" styleClass="btn btn-outline-primary btn-sm" style="margin-right:5px;"
-                                   actionListener="#{projectModel.select(_project)}" p:data-bs-toggle="modal" p:data-bs-target="#idModal">
+                                   actionListener="#{planModel.select(_plan)}" p:data-bs-toggle="modal" p:data-bs-target="#idModal">
                         <f:ajax render=":idModalForm"/>
                     </h:commandLink>
                     <h:commandLink value="Delete" styleClass="btn btn-outline-danger btn-sm"
-                                   actionListener="#{projectModel.delete(_project)}">
+                                   actionListener="#{planModel.delete(_plan)}">
                         <f:ajax render=":idForm"/>
                     </h:commandLink>
                 </h:column>
@@ -78,19 +78,19 @@
                 <div class="modal-content">
                     <h:form id="idModalForm">
                         <div class="modal-header">
-                            <h5 class="modal-title">Project</h5>
+                            <h5 class="modal-title">plan</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <h:selectOneMenu value="#{projectModel.selected.state}" styleClass="form-select" >
-                                    <f:selectItems value="#{projectModel.statuses}" />
+                                <h:selectOneMenu value="#{planModel.selected.state}" styleClass="form-select" >
+                                    <f:selectItems value="#{planModel.statuses}" />
                                 </h:selectOneMenu>
                             </div>
                             <div class="mb-3">
                                 <h:outputLabel for="idName" value="Name" styleClass="form-label"/>
                                 <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
-                                             id="idName" value="#{projectModel.selected.name}"/>
+                                             id="idName" value="#{planModel.selected.name}"/>
                                 <div class="invalid-feedback">
                                     <h:messages for="idName" errorClass="invalid" />
                                 </div>
@@ -98,7 +98,7 @@
                             <div class="mb-3">
                                 <h:outputLabel for="idOpenDate" value="Open Date" styleClass="form-label"/>
                                 <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
-                                             id="idOpenDate" value="#{projectModel.selected.openDate}">
+                                             id="idOpenDate" value="#{planModel.selected.openDate}">
                                     <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
                                 </h:inputText>
                                 <div class="invalid-feedback">
@@ -108,7 +108,7 @@
                             <div class="mb-3">
                                 <h:outputLabel for="idCloseDate" value="Close Date" styleClass="form-label"/>
                                 <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
-                                             id="idCloseDate" value="#{projectModel.selected.closeDate}">
+                                             id="idCloseDate" value="#{planModel.selected.closeDate}">
                                     <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
                                 </h:inputText>
                                 <div class="invalid-feedback">
@@ -118,7 +118,7 @@
                             <div class="mb-3">
                                 <h:outputLabel for="idNote" value="Note" styleClass="form-label"/>
                                 <h:inputText styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
-                                             id="idNote" value="#{projectModel.selected.note}">
+                                             id="idNote" value="#{planModel.selected.note}">
                                 </h:inputText>
                                 <div class="invalid-feedback">
                                     <h:messages for="idNote" errorClass="invalid" />
@@ -129,7 +129,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <h:commandLink value="Save" styleClass="btn btn-primary"
-                                           actionListener="#{projectModel.save}">
+                                           actionListener="#{planModel.save}">
                                 <f:ajax execute="@form" render=":idModalForm :idForm" onevent="closeModalIf"/>
                             </h:commandLink>
                             <div id="idValidationFailed" value="#{facesContext.validationFailed}"/>

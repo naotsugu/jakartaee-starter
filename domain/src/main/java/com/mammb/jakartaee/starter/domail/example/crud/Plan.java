@@ -9,14 +9,14 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDate;
 
-@Entity(name = Project.NAME)
-public class Project extends BaseEntity<Project> {
+@Entity(name = Plan.NAME)
+public class Plan extends BaseEntity<Plan> {
 
     public static final String NAME = "PROJECTS";
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ProjectState state;
+    private PlanState state;
 
     @NotEmpty
     private String name;
@@ -28,11 +28,11 @@ public class Project extends BaseEntity<Project> {
     private String note;
 
 
-    public Project() {
+    public Plan() {
 
     }
 
-    public Project(ProjectState state, String name, LocalDate openDate, LocalDate closeDate, String note) {
+    public Plan(PlanState state, String name, LocalDate openDate, LocalDate closeDate, String note) {
         this.state = state;
         this.name = name;
         this.openDate = openDate;
@@ -40,11 +40,11 @@ public class Project extends BaseEntity<Project> {
         this.note = note;
     }
 
-    public ProjectState getState() {
+    public PlanState getState() {
         return state;
     }
 
-    public void setState(ProjectState state) {
+    public void setState(PlanState state) {
         this.state = state;
     }
 

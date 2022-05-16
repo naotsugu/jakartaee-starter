@@ -1,7 +1,7 @@
 package com.mammb.jakartaee.starter.app.example.crud;
 
-import com.mammb.jakartaee.starter.domail.example.crud.Project;
-import com.mammb.jakartaee.starter.domail.example.crud.ProjectState;
+import com.mammb.jakartaee.starter.domail.example.crud.Plan;
+import com.mammb.jakartaee.starter.domail.example.crud.PlanState;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
@@ -13,17 +13,17 @@ import java.time.LocalDate;
 
 @Startup
 @Singleton
-public class ProjectInitializeService {
+public class PlanInitializeService {
 
     @PersistenceContext
     private EntityManager em;
 
     @PostConstruct
     public void init() {
-        TypedQuery<Long> query = em.createQuery(String.format("SELECT COUNT(e) FROM %s e", Project.NAME), Long.class);
+        TypedQuery<Long> query = em.createQuery(String.format("SELECT COUNT(e) FROM %s e", Plan.NAME), Long.class);
         if (query.getSingleResult() == 0) {
-            em.persist(new Project(ProjectState.PLAN, "Quality Project", null, null, ""));
-            em.persist(new Project(ProjectState.OPEN, "Design Project", LocalDate.of(2022, 4, 1), null, ""));
+            em.persist(new Plan(PlanState.PLAN, "Plan A", null, null, ""));
+            em.persist(new Plan(PlanState.OPEN, "Plan B", LocalDate.of(2022, 4, 1), null, ""));
         }
     }
 }
