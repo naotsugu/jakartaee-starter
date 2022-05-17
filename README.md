@@ -1,6 +1,9 @@
 
 ![jakarta-ee-starter](doc/images/jakarta-ee-starter-logo.svg)
 
+
+[![Java CI with Gradle](https://github.com/naotsugu/jakartaee-starter/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/naotsugu/jakartaee-starter/actions/workflows/gradle-build.yml)
+
 # Jakarta EE Starter
 
 This is a scaffolding application based on Jakarta EE 9.1.
