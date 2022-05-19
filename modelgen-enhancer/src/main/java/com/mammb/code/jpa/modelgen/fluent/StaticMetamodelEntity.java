@@ -28,10 +28,14 @@ import java.util.List;
  */
 public class StaticMetamodelEntity {
 
+    /** Context of processing. */
     private final Context context;
+
+    /** Static metamodel type element. */
     private final TypeElement element;
 
-    private final List<StaticMetamodelEntityAttribute> attributes;
+    /** Static metamodel type attribute. */
+    private final List<StaticMetamodelAttribute> attributes;
 
 
     protected StaticMetamodelEntity(Context context, TypeElement element) {
@@ -39,7 +43,7 @@ public class StaticMetamodelEntity {
         this.element = element;
         this.attributes = ElementFilter.fieldsIn(element.getEnclosedElements()).stream()
             .filter(e -> e.asType().toString().startsWith(AttributeType.PACKAGE_NAME))
-            .map(e -> StaticMetamodelEntityAttribute.of(this, e))
+            .map(e -> StaticMetamodelAttribute.of(e, context.getTypeUtils()))
             .toList();
     }
 
@@ -74,7 +78,7 @@ public class StaticMetamodelEntity {
     }
 
 
-    public List<StaticMetamodelEntityAttribute> getAttributes() {
+    public List<StaticMetamodelAttribute> getAttributes() {
         return attributes;
     }
 

@@ -17,6 +17,8 @@ package com.mammb.code.jpa.modelgen.fluent;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Types;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -26,38 +28,39 @@ import java.util.stream.Stream;
  *
  * @author Naotsugu Kobayashi
  */
-public class StaticMetamodelEntityAttribute {
+public class StaticMetamodelAttribute {
 
-    /** StaticMetamodelEntity. */
-    private final StaticMetamodelEntity entity;
     /** Static metamodel element. */
     private final Element element;
 
     /** Attribute type. */
     private final AttributeType attributeType;
     /** Type arguments. */
-    private final List<String> typeArguments;
+    private final List<TypeArgument> typeArguments;
     /** Attribute name. */
     private final String name;
 
 
-    protected StaticMetamodelEntityAttribute(StaticMetamodelEntity entity, Element element) {
-        this.entity = entity;
+    protected StaticMetamodelAttribute(Element element, Types types) {
         this.element = element;
         this.attributeType = AttributeType.of(asType(element).asElement().toString());
-        this.typeArguments = asType(element).getTypeArguments().stream().map(Object::toString).toList();
         this.name = element.getSimpleName().toString();
+        this.typeArguments = asType(element).getTypeArguments().stream()
+            .map(t -> TypeArgument.of(t, types.asElement(t))).toList();
+        if (typeArguments.size() < 2) {
+            throw new IllegalArgumentException();
+        }
     }
 
 
     /**
-     * Create a new {@link StaticMetamodelEntityAttribute} instance with the given entity.
-     * @param entity the static metamodel entity
+     * Create a new {@link StaticMetamodelAttribute} instance with the given entity.
      * @param element the attribute element
+     * @param types the type utils
      * @return static metamodel attribute
      */
-    public static StaticMetamodelEntityAttribute of(StaticMetamodelEntity entity, Element element) {
-        return new StaticMetamodelEntityAttribute(entity, element);
+    public static StaticMetamodelAttribute of(Element element, Types types) {
+        return new StaticMetamodelAttribute(element, types);
     }
 
 
@@ -77,7 +80,7 @@ public class StaticMetamodelEntityAttribute {
      * @return the type arguments
      */
     public List<String> getTypeArguments() {
-        return typeArguments;
+        return typeArguments.stream().map(TypeArgument::getName).toList();
     }
 
 
@@ -96,26 +99,15 @@ public class StaticMetamodelEntityAttribute {
      * @return If this attribute refers to an Entity, return {@code true}
      */
     public boolean isEntityTypeTo() {
-        var args = asType(element).getTypeArguments();
-        var elm = entity.getContext().getTypeUtils().asElement(args.get(args.size() - 1));
-        if (Objects.isNull(elm)) return false;
-        return elm.getAnnotationMirrors().stream()
-            .map(Objects::toString)
-            .anyMatch(this::hasEntityAnn);
-    }
-
-
-    private boolean hasEntityAnn(String str) {
-        return Stream.of(
-                "jakarta.persistence.Entity",
-                "jakarta.persistence.Embeddable",
-                "jakarta.persistence.MappedSuperclass")
-            .anyMatch(str::contains);
-
+        return typeArguments.get(typeArguments.size() - 1).isStruct();
     }
 
     private static DeclaredType asType(Element element) {
-        return (DeclaredType) element.asType();
+        var typeMirror = element.asType();
+        if (typeMirror instanceof DeclaredType declaredType) {
+            return declaredType;
+        }
+        throw new IllegalArgumentException(typeMirror.toString());
     }
 
 }

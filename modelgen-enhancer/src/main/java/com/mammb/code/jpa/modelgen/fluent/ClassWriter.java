@@ -20,6 +20,7 @@ import javax.tools.FileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Helper to write the actual enhanced metamodel class
@@ -65,7 +66,7 @@ public class ClassWriter {
 
         } catch (FilerException e) {
             context.logError("Problem with Filer: " + e.getMessage());
-        } catch (IOException e) {
+        } catch (Exception e) {
             context.logError("Problem opening file to write MetaModel for " +
                 entity.getSimpleName() + ": " + e.getMessage());
         }
@@ -127,7 +128,7 @@ public class ClassWriter {
     }
 
 
-    protected String generateRootMethod(StaticMetamodelEntityAttribute attribute) {
+    protected String generateRootMethod(StaticMetamodelAttribute attribute) {
 
         if (attribute.getAttributeType().isList()) {
             var ret = "";
@@ -329,7 +330,7 @@ public class ClassWriter {
         return sb.toString();
     }
 
-    protected String generateJoinMethod(StaticMetamodelEntityAttribute attribute) {
+    protected String generateJoinMethod(StaticMetamodelAttribute attribute) {
 
         if (attribute.getAttributeType().isList()) {
             return """
@@ -454,7 +455,7 @@ public class ClassWriter {
     }
 
 
-    protected String generatePathMethod(StaticMetamodelEntityAttribute attribute) {
+    protected String generatePathMethod(StaticMetamodelAttribute attribute) {
         if (attribute.getAttributeType().isList()) {
             return """
                     public Expression<List<%2$s>> get%3$s() {
