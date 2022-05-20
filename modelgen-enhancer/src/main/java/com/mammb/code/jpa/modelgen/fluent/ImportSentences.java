@@ -25,19 +25,19 @@ import java.util.stream.Collectors;
  *
  * @author Naotsugu Kobayashi
  */
-public class Importer {
+public class ImportSentences {
 
     private final Map<String, String> map;
     private final String selfPackage;
 
-    public Importer(String selfPackage) {
+    public ImportSentences(String selfPackage) {
         this.map = new HashMap<>();
         this.selfPackage = selfPackage;
         initImplicit();
     }
 
-    public static Importer of(String selfPackage) {
-        return new Importer(selfPackage);
+    public static ImportSentences of(String selfPackage) {
+        return new ImportSentences(selfPackage);
     }
 
     private void initImplicit() {

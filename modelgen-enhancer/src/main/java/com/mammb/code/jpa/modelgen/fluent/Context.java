@@ -15,6 +15,7 @@
  */
 package com.mammb.code.jpa.modelgen.fluent;
 
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -29,34 +30,79 @@ public class Context {
 
     /** Annotation processing environment. */
     private final ProcessingEnvironment pe;
+
     /** Mode of debug. */
     private final boolean debug;
 
 
-    public Context(ProcessingEnvironment pe) {
+    /**
+     * Private constructor.
+     */
+    protected Context(ProcessingEnvironment pe, boolean debug) {
         this.pe = pe;
-        this.debug = Boolean.parseBoolean(pe.getOptions().get("debug"));
+        this.debug = debug;
     }
 
-    public ProcessingEnvironment getProcessingEnvironment() {
-        return pe;
+    /**
+     * Create the context instance.
+     * @param pe processing environment
+     * @return the context
+     */
+    public static Context of(ProcessingEnvironment pe) {
+        return new Context(pe, Boolean.parseBoolean(pe.getOptions().get("debug")));
     }
 
+
+    /**
+     * Get the filer used to create new source, class, or auxiliary files.
+     * @return the filer used to create new source, class, or auxiliary files
+     */
+    public Filer getFiler() {
+        return pe.getFiler();
+    }
+
+
+    /**
+     * Get an implementation of some utility methods for operating on elements.
+     * @return utility for operating on elements
+     */
     public Elements getElementUtils() {
         return pe.getElementUtils();
     }
 
+
+    /**
+     * Get an implementation of some utility methods for operating on types.
+     * @return utility for operating on types
+     */
     public Types getTypeUtils() {
         return pe.getTypeUtils();
     }
 
+
+    /**
+     * Write the debug log message.
+     * @param message the message
+     */
     public void logDebug(String message) {
         if (!debug) return;
         pe.getMessager().printMessage(Diagnostic.Kind.OTHER, message);
     }
+
+
+    /**
+     * Write the info log message.
+     * @param message the message
+     */
     public void logInfo(String message) {
         pe.getMessager().printMessage(Diagnostic.Kind.NOTE, message);
     }
+
+
+    /**
+     * Write the error log message.
+     * @param message the message
+     */
     public void logError(String message) {
         pe.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
     }

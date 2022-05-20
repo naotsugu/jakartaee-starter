@@ -15,6 +15,7 @@
  */
 package com.mammb.code.jpa.modelgen.fluent;
 
+import javax.lang.model.element.Element;
 import java.util.Arrays;
 
 /**
@@ -26,15 +27,34 @@ public enum AttributeType {
 
     /** SingularAttribute. */
     SINGULAR_ATTRIBUTE("SingularAttribute"),
+
     /** ListAttribute. */
     LIST_ATTRIBUTE("ListAttribute"),
+
     /** SetAttribute. */
     SET_ATTRIBUTE("SetAttribute"),
+
     /** CollectionAttribute. */
     COLLECTION_ATTRIBUTE("CollectionAttribute"),
+
     /** MapAttribute. */
     MAP_ATTRIBUTE("MapAttribute"),
     ;
+
+    /** Attribute package name. */
+    static final String PACKAGE_NAME = "jakarta.persistence.metamodel.";
+
+    /** Attribute FQCN. */
+    private final String fqcn;
+
+
+    /**
+     * Create AttributeType by given name.
+     * @param name the Attribute name
+     */
+    AttributeType(String name) {
+        this.fqcn = PACKAGE_NAME + name;
+    }
 
 
     /**
@@ -81,21 +101,6 @@ public enum AttributeType {
         return this == MAP_ATTRIBUTE;
     }
 
-    /** Attribute package name. */
-    public static final String PACKAGE_NAME = "jakarta.persistence.metamodel.";
-
-    /** Attribute FQCN. */
-    private final String fqcn;
-
-
-    /**
-     * Create AttributeType by given name.
-     * @param name the Attribute name
-     */
-    AttributeType(String name) {
-        this.fqcn = PACKAGE_NAME + name;
-    }
-
 
     /**
      * Select attribute type by FQCN.
@@ -107,6 +112,16 @@ public enum AttributeType {
             .filter(e -> e.fqcn.equals(fqcn))
             .findFirst()
             .orElseThrow();
+    }
+
+
+    /**
+     * Select attribute type by FQCN.
+     * @param element the element
+     * @return the Attribute
+     */
+    public static AttributeType of(Element element) {
+        return of(element.toString());
     }
 
 

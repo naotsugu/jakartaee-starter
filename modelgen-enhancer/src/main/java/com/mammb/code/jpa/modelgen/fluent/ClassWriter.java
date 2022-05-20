@@ -17,10 +17,8 @@ package com.mammb.code.jpa.modelgen.fluent;
 
 import javax.annotation.processing.FilerException;
 import javax.tools.FileObject;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Helper to write the actual enhanced metamodel class
@@ -30,16 +28,31 @@ import java.util.stream.Collectors;
  */
 public class ClassWriter {
 
+    /** Context of processing. */
     private final Context context;
-    private final StaticMetamodelEntity entity;
-    private final Importer importer;
 
-    public ClassWriter(Context context, StaticMetamodelEntity entity) {
+    /** Representation of static metamodel. */
+    private final StaticMetamodelEntity entity;
+
+    private final ImportSentences importer;
+
+
+    /**
+     * Constructor.
+     */
+    protected ClassWriter(Context context, StaticMetamodelEntity entity) {
         this.context = context;
         this.entity = entity;
-        this.importer = Importer.of(entity.getPackageName());
+        this.importer = ImportSentences.of(entity.getPackageName());
     }
 
+
+    /**
+     * Create a class writer instance.
+     * @param context the context of processing
+     * @param entity the static metamodel entity
+     * @return Class writer
+     */
     public static ClassWriter of(Context context, StaticMetamodelEntity entity) {
         return new ClassWriter(context, entity);
     }
@@ -49,7 +62,7 @@ public class ClassWriter {
 
             String body = generateBody().toString();
 
-            FileObject fo = context.getProcessingEnvironment().getFiler().createSourceFile(
+            FileObject fo = context.getFiler().createSourceFile(
                 entity.getQualifiedName() + "Root_", entity.getElement());
 
             try (PrintWriter pw = new PrintWriter(fo.openOutputStream())) {

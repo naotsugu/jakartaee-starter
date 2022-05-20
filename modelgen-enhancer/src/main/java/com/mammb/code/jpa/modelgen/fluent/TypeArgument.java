@@ -15,13 +15,9 @@
  */
 package com.mammb.code.jpa.modelgen.fluent;
 
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.type.TypeMirror;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 /**
  * Metamodel attribute type argument.
@@ -29,20 +25,35 @@ import java.util.stream.Collectors;
  */
 public class TypeArgument {
 
+    /** Type argument mirror. */
     private final TypeMirror typeMirror;
 
+    /** Type argument mirror element. */
     private final Element typeMirrorElement;
 
+    /** Persistence type. */
+    private final PersistenceType persistenceType;
 
+
+    /**
+     * Private constructor.
+     */
     private TypeArgument(TypeMirror typeMirror, Element typeMirrorElement) {
         this.typeMirror = typeMirror;
         this.typeMirrorElement = typeMirrorElement;
+        this.persistenceType = asPersistenceType(typeMirrorElement);
     }
 
-
+    /**
+     * Create the type argument.
+     * @param typeMirror Type argument mirror
+     * @param typeMirrorElement Type argument mirror element
+     * @return the type argument
+     */
     public static TypeArgument of(TypeMirror typeMirror, Element typeMirrorElement) {
         return new TypeArgument(typeMirror, typeMirrorElement);
     }
+
 
     /**
      * Get the attribute type argument name.
@@ -52,30 +63,19 @@ public class TypeArgument {
         return typeMirror.toString();
     }
 
+
     /**
      * Get the persistence type.
      * @return the persistence type
      */
     public PersistenceType getPersistenceType() {
-
-        if (Objects.isNull(typeMirrorElement)) {
-            return PersistenceType.BASIC;
-        }
-
-        var persistenceTypes = Arrays.stream(PersistenceType.values())
-            .collect(Collectors.toMap(PersistenceType::getFqcn, UnaryOperator.identity()));
-
-        return typeMirrorElement.getAnnotationMirrors().stream()
-            .map(am -> am.getAnnotationType().toString())
-            .map(persistenceTypes::get)
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(PersistenceType.BASIC);
+        return persistenceType;
     }
 
+
     /**
-     * Gets whether PersistenceType is a structure or not.
-     * @return if PersistenceType is a structure, then {@code true}
+     * Gets whether {@link PersistenceType} is a structure or not.
+     * @return if {@link PersistenceType} is a structure, then {@code true}
      */
     public boolean isStruct() {
         return getPersistenceType() == PersistenceType.ENTITY
@@ -85,11 +85,32 @@ public class TypeArgument {
 
 
     /**
-     * Gets whether PersistenceType is a basic or not.
-     * @return if PersistenceType is a basic, then {@code true}
+     * Gets whether {@link PersistenceType} is a basic or not.
+     * @return if {@link PersistenceType} is a basic, then {@code true}
      */
     public boolean isBasic() {
         return getPersistenceType() == PersistenceType.BASIC;
+    }
+
+
+    /**
+     * Convert the element as {@link PersistenceType}.
+     * @param elm the element
+     * @return {@link PersistenceType}
+     */
+    private static PersistenceType asPersistenceType(final Element elm) {
+
+        if (Objects.isNull(elm)) {
+            return PersistenceType.BASIC;
+        }
+
+        return elm.getAnnotationMirrors().stream()
+            .map(am -> am.getAnnotationType().toString())
+            .map(PersistenceType.mappedFqcn::get)
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElse(PersistenceType.BASIC);
+
     }
 
 }

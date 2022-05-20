@@ -35,21 +35,34 @@ public class StaticMetamodelAttribute {
 
     /** Attribute type. */
     private final AttributeType attributeType;
+
     /** Type arguments. */
     private final List<TypeArgument> typeArguments;
+
     /** Attribute name. */
     private final String name;
 
 
+    /**
+     * Constructor.
+     */
     protected StaticMetamodelAttribute(Element element, Types types) {
+
         this.element = element;
-        this.attributeType = AttributeType.of(asType(element).asElement().toString());
         this.name = element.getSimpleName().toString();
-        this.typeArguments = asType(element).getTypeArguments().stream()
-            .map(t -> TypeArgument.of(t, types.asElement(t))).toList();
+
+        final var declaredType = asType(element);
+
+        this.attributeType = AttributeType.of(declaredType.asElement());
+
+        this.typeArguments = declaredType.getTypeArguments().stream()
+            .map(t -> TypeArgument.of(t, types.asElement(t)))
+            .toList();
+
         if (typeArguments.size() < 2) {
             throw new IllegalArgumentException();
         }
+
     }
 
 
@@ -102,12 +115,17 @@ public class StaticMetamodelAttribute {
         return typeArguments.get(typeArguments.size() - 1).isStruct();
     }
 
+
+    /**
+     * Cast as declared type.
+     * @param element the element
+     * @return the declared type
+     */
     private static DeclaredType asType(Element element) {
-        var typeMirror = element.asType();
-        if (typeMirror instanceof DeclaredType declaredType) {
+        if (element.asType() instanceof DeclaredType declaredType) {
             return declaredType;
         }
-        throw new IllegalArgumentException(typeMirror.toString());
+        throw new IllegalArgumentException(element.toString());
     }
 
 }

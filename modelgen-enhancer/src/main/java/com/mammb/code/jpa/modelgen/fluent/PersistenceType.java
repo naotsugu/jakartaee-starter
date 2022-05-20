@@ -15,6 +15,11 @@
  */
 package com.mammb.code.jpa.modelgen.fluent;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+
 /**
  * Persistence Type.
  * @author Naotsugu Kobayashi
@@ -23,19 +28,33 @@ public enum PersistenceType {
 
     /** Entity. */
     ENTITY("jakarta.persistence.Entity"),
+
     /** Embeddable class. */
     EMBEDDABLE("jakarta.persistence.Embeddable"),
+
     /** Mapped superclass. */
     MAPPED_SUPERCLASS("jakarta.persistence.MappedSuperclass"),
+
     /** Basic type. */
     BASIC(""),
     ;
 
+    /** FQCN mapped persistence type. */
+    public static final Map<String, PersistenceType> mappedFqcn = Map.copyOf(
+        Arrays.stream(PersistenceType.values())
+            .collect(Collectors.toMap(PersistenceType::getFqcn, UnaryOperator.identity())));
+
+    /** FQCN of Persistence Type. */
     private final String fqcn;
 
+
+    /**
+     * private Constructor.
+     */
     PersistenceType(String fqcn) {
         this.fqcn = fqcn;
     }
+
 
     /**
      * Get the fqcn of persistence type name.
@@ -44,4 +63,5 @@ public enum PersistenceType {
     public String getFqcn() {
         return fqcn;
     }
+
 }
