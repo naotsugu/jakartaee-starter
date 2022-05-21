@@ -17,11 +17,8 @@ package com.mammb.code.jpa.modelgen.fluent;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 /**
  * Representation of static metamodel attributes.
@@ -48,6 +45,10 @@ public class StaticMetamodelAttribute {
      */
     protected StaticMetamodelAttribute(Element element, Types types) {
 
+        if (!element.asType().toString().startsWith(AttributeType.PACKAGE_NAME)) {
+            throw new IllegalArgumentException("Unsupported type : " + element.asType().toString());
+        }
+
         this.element = element;
         this.name = element.getSimpleName().toString();
 
@@ -60,7 +61,8 @@ public class StaticMetamodelAttribute {
             .toList();
 
         if (typeArguments.size() < 2) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Unsupported type arguments size : "
+                + element.asType().toString() + ", " + typeArguments.size());
         }
 
     }
@@ -88,16 +90,6 @@ public class StaticMetamodelAttribute {
 
 
     /**
-     * Get the type arguments of attribute.
-     * e.g. foo.bar.Customer, java.lang.String
-     * @return the type arguments
-     */
-    public List<String> getTypeArguments() {
-        return typeArguments.stream().map(TypeArgument::getName).toList();
-    }
-
-
-    /**
      * Get the attribute name.
      * e.g. userName
      * @return the attribute name
@@ -108,11 +100,57 @@ public class StaticMetamodelAttribute {
 
 
     /**
-     * Gets whether this attribute refers to an Entity or not.
-     * @return If this attribute refers to an Entity, return {@code true}
+     * Get the type containing the represented attribute.
+     *
+     * e.g. {@code RootEntity}, if you have the following code :
+     * <pre>{@code
+     *     public static volatile SingularAttribute<RootEntity, String> name;
+     * }</pre>
+     *
+     * @return The type containing the represented attribute
      */
-    public boolean isEntityTypeTo() {
-        return typeArguments.get(typeArguments.size() - 1).isStruct();
+    public TypeArgument getEnclosingType() {
+        return typeArguments.get(0);
+    }
+
+
+    /**
+     * Get the type of the key of the represented Map.
+     *
+     * e.g. {@code String}, if you have the following code :
+     * <pre>{@code
+     *     public static volatile MapAttribute<RootEntity, String, Child> map;
+     * }</pre>
+     *
+     * @return The type of the key of the represented Map
+     */
+    public TypeArgument getKeyType() {
+        return typeArguments.size() > 2 ? typeArguments.get(1) : null;
+    }
+
+
+    /**
+     * Get the type of the represented attribute.
+     *
+     * e.g. {@code String}, if you have the following code :
+     * <pre>{@code
+     *     public static volatile SingularAttribute<RootEntity, String> name;
+     * }</pre>
+     *
+     * @return The type of the represented attribute
+     */
+    public TypeArgument getValueType() {
+        return typeArguments.get(typeArguments.size() - 1);
+    }
+
+
+    /**
+     * Get the type arguments of attribute.
+     * e.g. foo.bar.Customer, java.lang.String
+     * @return the type arguments
+     */
+    public List<String> getTypeArgumentsString() {
+        return typeArguments.stream().map(TypeArgument::getName).toList();
     }
 
 

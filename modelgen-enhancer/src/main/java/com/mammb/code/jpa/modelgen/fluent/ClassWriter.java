@@ -22,7 +22,7 @@ import java.util.Objects;
 
 /**
  * Helper to write the actual enhanced metamodel class
- * using the  {@link javax.annotation.processing.Filer} API.
+ * using the {@link javax.annotation.processing.Filer} API.
  *
  * @author Naotsugu Kobayashi
  */
@@ -34,7 +34,8 @@ public class ClassWriter {
     /** Representation of static metamodel. */
     private final StaticMetamodelEntity entity;
 
-    private final ImportSentences importer;
+    /** Import sentences. */
+    private final ImportSentences importes;
 
 
     /**
@@ -43,7 +44,7 @@ public class ClassWriter {
     protected ClassWriter(Context context, StaticMetamodelEntity entity) {
         this.context = context;
         this.entity = entity;
-        this.importer = ImportSentences.of(entity.getPackageName());
+        this.importes = ImportSentences.of(entity.getPackageName());
     }
 
 
@@ -57,6 +58,10 @@ public class ClassWriter {
         return new ClassWriter(context, entity);
     }
 
+
+    /**
+     * Write a generated class file.
+     */
     public void writeFile() {
         try {
 
@@ -70,7 +75,7 @@ public class ClassWriter {
                     pw.println("package " + entity.getPackageName() + ";");
                     pw.println();
                 }
-                pw.println(importer.generateImports());
+                pw.println(importes.generateImports());
                 pw.println();
 
                 pw.println(body);
@@ -92,6 +97,7 @@ public class ClassWriter {
         return sb;
     }
 
+
     protected String generateClassDeclaration() {
         StringBuilder sb = new StringBuilder();
         if (Objects.isNull(entity.getSuperClass())) {
@@ -104,10 +110,12 @@ public class ClassWriter {
                     public %2$sRoot_(Root<? extends %3$s> root) {
                         this.root = root;
                     }
+
                     @Override
                     public Root<? extends %3$s> get() {
                         return root;
                     }
+
                 """.formatted(
                     JpaMetaModelEnhanceProcessor.class.getName(), // %1$s
                     entity.getSimpleName(),                       // %2$s
@@ -122,6 +130,7 @@ public class ClassWriter {
                     public %2$sRoot_(Root<? extends %4$s> root) {
                         super(root);
                     }
+
                 """.formatted(
                     JpaMetaModelEnhanceProcessor.class.getName(), // %1$s
                     entity.getSimpleName(),                       // %2$s
@@ -132,9 +141,9 @@ public class ClassWriter {
 
         entity.getAttributes().forEach(attr -> sb.append(generateRootMethod(attr)));
 
-        sb.append(System.lineSeparator());
-        sb.append(generateJoinClass()).append(System.lineSeparator());
-        sb.append(generatePathClass()).append(System.lineSeparator());
+        sb.append('\n');
+        sb.append(generateJoinClass()).append('\n');
+        sb.append(generatePathClass()).append('\n');
 
         sb.append("}");
         return sb.toString();
@@ -145,132 +154,69 @@ public class ClassWriter {
 
         if (attribute.getAttributeType().isList()) {
             var ret = "";
-            if (attribute.isEntityTypeTo()) {
-                ret = """
-                public %2$s_Root_.Join_ join%3$s() {
-                    return new %2$s_Root_.Join_() {
-                        @Override
-                        public ListJoin<%1$s, %2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
-                        }
-                    };
-                }
+            if (attribute.getValueType().isStruct()) {
+                ret = bindAttribute(attribute, """
+                    public %2$s_Root_.Join_ join%3$s() {
+                        return new %2$s_Root_.Join_() {
+                            @Override
+                            public ListJoin<%1$s, %2$s> get() {
+                                return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
+                            }
+                        };
+                    }
 
-            """.formatted(
-                    importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                    importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                    capitalize(attribute.getName()),                      // %3$s
-                    attribute.getName()                                   // %4$s
-                );
+                """);
             }
-            return ret + """
+            return ret + bindAttribute(attribute, """
                 public Expression<List<%2$s>> get%3$s() {
                     return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
                 }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
+            """);
 
         } else if (attribute.getAttributeType().isSet()) {
             var ret = "";
-            if (attribute.isEntityTypeTo()) {
-                ret = """
-                public %2$s_Root_.Join_ join%3$s() {
-                    return new %2$s_Root_.Join_() {
-                        @Override
-                        public SetJoin<%1$s, %2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
-                        }
-                    };
-                }
+            if (attribute.getValueType().isStruct()) {
+                ret = bindAttribute(attribute, """
+                    public %2$s_Root_.Join_ join%3$s() {
+                        return new %2$s_Root_.Join_() {
+                            @Override
+                            public SetJoin<%1$s, %2$s> get() {
+                                return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
+                            }
+                        };
+                    }
 
-            """.formatted(
-                    importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                    importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                    capitalize(attribute.getName()),                      // %3$s
-                    attribute.getName()                                   // %4$s
-                );
+                """);
             }
-            return ret + """
+            return ret + bindAttribute(attribute, """
                 public Expression<Set<%2$s>> get%3$s() {
                     return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
                 }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
+            """);
 
         } else if (attribute.getAttributeType().isCollection()) {
             var ret = "";
-            if (attribute.isEntityTypeTo()) {
-                ret = """
-                public %2$s_Root_.Join_ join%3$s() {
-                    return new %2$s_Root_.Join_() {
-                        @Override
-                        public CollectionJoin<%1$s, %2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
-                        }
-                    };
-                }
+            if (attribute.getValueType().isStruct()) {
+                ret = bindAttribute(attribute, """
+                    public %2$s_Root_.Join_ join%3$s() {
+                        return new %2$s_Root_.Join_() {
+                            @Override
+                            public CollectionJoin<%1$s, %2$s> get() {
+                                return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
+                            }
+                        };
+                    }
 
-            """.formatted(
-                    importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                    importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                    capitalize(attribute.getName()),                      // %3$s
-                    attribute.getName()                                   // %4$s
-                );
+                """);
             }
-            return ret + """
+            return ret + bindAttribute(attribute, """
                 public Expression<Collection<%2$s>> get%3$s() {
                     return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
                 }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
+            """);
 
-        } else if (attribute.getAttributeType().isMap()) {
-            var ret = "";
-            if (attribute.isEntityTypeTo()) {
-                ret = """
-                public %3$s_Root_.Join_ join%4$s() {
-                    return new %3$s_Root_.Join_() {
-                        @Override
-                        public MapJoin<%1$s, %2$s, %3$s> get() {
-                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%5$s);
-                        }
-                    };
-                }
-
-            """.formatted(
-                    importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                    importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                    importer.apply(attribute.getTypeArguments().get(2)),  // %3$s
-                    capitalize(attribute.getName()),                      // %4$s
-                    attribute.getName()                                   // %5$s
-                );
-            }
-            return ret + """
-                public Expression<Map<%2$s, %3$s>> get%4$s() {
-                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%5$s);
-                }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                importer.apply(attribute.getTypeArguments().get(2)),  // %3$s
-                capitalize(attribute.getName()),                      // %4$s
-                attribute.getName()                                   // %5$s
-            );
-
-        } else if (attribute.getAttributeType().isSingular() && attribute.isEntityTypeTo()) {
-            return """
+        } else if (attribute.getAttributeType().isSingular() && attribute.getValueType().isStruct()) {
+            return bindAttribute(attribute, """
                 public %2$s_Root_.Join_ join%3$s() {
                     return new %2$s_Root_.Join_() {
                         @Override
@@ -287,24 +233,34 @@ public class ClassWriter {
                         }
                     };
                 }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
+            """);
 
         } else if (attribute.getAttributeType().isSingular()) {
-            return """
+            return bindAttribute(attribute, """
                 public Path<%2$s> get%3$s() {
                     return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
                 }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
+            """);
+        } else if (attribute.getAttributeType().isMap()) {
+            var ret = "";
+            if (attribute.getValueType().isStruct()) {
+                ret = bindMapAttribute(attribute, """
+                    public %3$s_Root_.Join_ join%4$s() {
+                        return new %3$s_Root_.Join_() {
+                            @Override
+                            public MapJoin<%1$s, %2$s, %3$s> get() {
+                                return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%5$s);
+                            }
+                        };
+                    }
+
+                """);
+            }
+            return ret + bindMapAttribute(attribute, """
+                public Expression<Map<%2$s, %3$s>> get%4$s() {
+                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%5$s);
+                }
+            """);
         } else {
             return "";
         }
@@ -343,98 +299,65 @@ public class ClassWriter {
         return sb.toString();
     }
 
+
     protected String generateJoinMethod(StaticMetamodelAttribute attribute) {
 
         if (attribute.getAttributeType().isList()) {
-            return """
+            return bindAttribute(attribute, """
                     public ListJoin<%1$s, %2$s> join%3$s() {
                         return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
                     }
                     public Expression<List<%2$s>> get%3$s() {
                         return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
                     }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
-
+            """);
         } else if (attribute.getAttributeType().isSet()) {
-            return """
+            return bindAttribute(attribute, """
                     public SetJoin<%1$s, %2$s> join%3$s() {
                         return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
                     }
                     public Expression<Set<%2$s>> get%3$s() {
                         return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
                     }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
-
+            """);
         } else if (attribute.getAttributeType().isCollection()) {
-            return """
+            return bindAttribute(attribute, """
                     public CollectionJoin<%1$s, %2$s> join%3$s() {
                         return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
                     }
-                   public Expression<Collection<%2$s>> get%3$s() {
+                    public Expression<Collection<%2$s>> get%3$s() {
                         return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
                     }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
-
-        } else if (attribute.getAttributeType().isMap()) {
-            return """
-                    public MapJoin<%1$s, %2$s, %3$s> join%4$s() {
-                        return ((Join<?, %1$s>) get()).join(%1$s_.%5$s);
-                    }
-                    public Expression<Map<%2$s, %3$s>> get%4$s() {
-                        return ((Join<?, %1$s>) get()).get(%1$s_.%5$s);
-                    }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                importer.apply(attribute.getTypeArguments().get(2)),  // %3$s
-                capitalize(attribute.getName()),                      // %4$s
-                attribute.getName()                                   // %5$s
-            );
-
-        } else if (attribute.getAttributeType().isSingular() && attribute.isEntityTypeTo()) {
-            return """
+            """);
+        } else if (attribute.getAttributeType().isSingular() && attribute.getValueType().isStruct()) {
+            return bindAttribute(attribute, """
                     public Join<%1$s, %2$s> join%3$s() {
                         return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
                     }
                     public Path<%2$s> get%3$s() {
                         return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
                     }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
+            """);
         } else if (attribute.getAttributeType().isSingular()) {
-            return """
+            return bindAttribute(attribute, """
                     public Path<%2$s> get%3$s() {
                         return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
                     }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
+            """);
+        } else if (attribute.getAttributeType().isMap()) {
+            return bindMapAttribute(attribute, """
+                    public MapJoin<%1$s, %2$s, %3$s> join%4$s() {
+                        return ((Join<?, %1$s>) get()).join(%1$s_.%5$s);
+                    }
+                    public Expression<Map<%2$s, %3$s>> get%4$s() {
+                        return ((Join<?, %1$s>) get()).get(%1$s_.%5$s);
+                    }
+            """);
         } else {
             return "";
         }
     }
+
 
     protected String generatePathClass() {
         StringBuilder sb = new StringBuilder();
@@ -463,83 +386,79 @@ public class ClassWriter {
         }
         entity.getAttributes().forEach(attr -> sb.append(generatePathMethod(attr)));
 
-        sb.append("    }").append(System.lineSeparator());
+        sb.append("    }").append('\n');
         return sb.toString();
     }
 
 
     protected String generatePathMethod(StaticMetamodelAttribute attribute) {
         if (attribute.getAttributeType().isList()) {
-            return """
+            return bindAttribute(attribute, """
                     public Expression<List<%2$s>> get%3$s() {
                         return ((Path<%1$s>) get()).get(%1$s_.%4$s);
                     }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
-
+            """);
         } else if (attribute.getAttributeType().isSet()) {
-            return """
+            return bindAttribute(attribute, """
                     public Expression<Set<%2$s>> get%3$s() {
                         return ((Path<%1$s>) get()).get(%1$s_.%4$s);
                     }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
-
+            """);
         } else if (attribute.getAttributeType().isCollection()) {
-            return """
+            return bindAttribute(attribute, """
                     public Expression<Collection<%2$s>> get%3$s() {
                         return ((Path<%1$s>) get()).get(%1$s_.%4$s);
                     }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
-
-        } else if (attribute.getAttributeType().isMap()) {
-            return """
-                    public Expression<Map<%2$s, %3$s>> get%4$s() {
-                        return ((Path<%1$s>) get()).get(%1$s_.%5$s);
-                    }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                importer.apply(attribute.getTypeArguments().get(2)),  // %3$s
-                capitalize(attribute.getName()),                      // %4$s
-                attribute.getName()                                   // %5$s
-            );
-
+            """);
         } else if (attribute.getAttributeType().isSingular()) {
-            return """
+            return bindAttribute(attribute, """
                     public Path<%2$s> get%3$s() {
                         return ((Path<%1$s>) get()).get(%1$s_.%4$s);
                     }
-            """.formatted(
-                importer.apply(attribute.getTypeArguments().get(0)),  // %1$s
-                importer.apply(attribute.getTypeArguments().get(1)),  // %2$s
-                capitalize(attribute.getName()),                      // %3$s
-                attribute.getName()                                   // %4$s
-            );
+            """);
+        } else if (attribute.getAttributeType().isMap()) {
+            return bindMapAttribute(attribute, """
+                    public Expression<Map<%2$s, %3$s>> get%4$s() {
+                        return ((Path<%1$s>) get()).get(%1$s_.%5$s);
+                    }
+            """);
         } else {
             return "";
         }
 
     }
 
-    protected static String capitalize(String str) {
-        if (Objects.isNull(str) || str.isEmpty()) {
-            return str;
+    protected String bindAttribute(StaticMetamodelAttribute attribute, String template) {
+        if (attribute.getAttributeType().isMap()) {
+            throw new IllegalArgumentException(attribute.getAttributeType().toString());
         }
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
+        return template.formatted(
+            importes.apply(attribute.getEnclosingType().getName()), // %1$s
+            importes.apply(attribute.getValueType().getName()),     // %2$s
+            capitalize(attribute.getName()),                        // %3$s
+            attribute.getName()                                     // %4$s
+        );
+    }
+
+
+    protected String bindMapAttribute(StaticMetamodelAttribute attribute, String template) {
+        if (!attribute.getAttributeType().isMap()) {
+            throw new IllegalArgumentException(attribute.getAttributeType().toString());
+        }
+        return template.formatted(
+            importes.apply(attribute.getEnclosingType().getName()), // %1$s
+            importes.apply(attribute.getKeyType().getName()),       // %2$s
+            importes.apply(attribute.getValueType().getName()),     // %3$s
+            capitalize(attribute.getName()),                        // %4$s
+            attribute.getName()                                     // %5$s
+        );
+    }
+
+
+    protected static String capitalize(String str) {
+        return (Objects.isNull(str) || str.isEmpty())
+            ? str
+            : str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
 }

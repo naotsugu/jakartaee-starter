@@ -41,18 +41,20 @@ public class ImportSentences {
     }
 
     private void initImplicit() {
-        map.put("Expression", "jakarta.persistence.criteria.Expression");
-        map.put("Root",       "jakarta.persistence.criteria.Root");
-        map.put("Join",       "jakarta.persistence.criteria.Join");
-        map.put("Path",       "jakarta.persistence.criteria.Path");
-        map.put("ListJoin",   "jakarta.persistence.criteria.ListJoin");
-        map.put("SetJoin",    "jakarta.persistence.criteria.SetJoin");
-        map.put("MapJoin",    "jakarta.persistence.criteria.MapJoin");
-        map.put("List",       "java.util.List");
-        map.put("Map",        "java.util.Map");
-        map.put("Set",        "java.util.Set");
-        map.put("Supplier",   "java.util.function.Supplier");
-        map.put("Generated",  "javax.annotation.processing.Generated");
+        map.put("Expression",     "jakarta.persistence.criteria.Expression");
+        map.put("Root",           "jakarta.persistence.criteria.Root");
+        map.put("Join",           "jakarta.persistence.criteria.Join");
+        map.put("Path",           "jakarta.persistence.criteria.Path");
+        map.put("ListJoin",       "jakarta.persistence.criteria.ListJoin");
+        map.put("SetJoin",        "jakarta.persistence.criteria.SetJoin");
+        map.put("MapJoin",        "jakarta.persistence.criteria.MapJoin");
+        map.put("CollectionJoin", "jakarta.persistence.criteria.CollectionJoin");
+        map.put("List",           "java.util.List");
+        map.put("Map",            "java.util.Map");
+        map.put("Set",            "java.util.Set");
+        map.put("Collection",     "java.util.Collection");
+        map.put("Supplier",       "java.util.function.Supplier");
+        map.put("Generated",      "javax.annotation.processing.Generated");
     }
 
     protected String generateImports() {
@@ -62,7 +64,7 @@ public class ImportSentences {
     }
 
     public String apply(String fqcn) {
-        if (Objects.isNull(fqcn) || fqcn.isEmpty() || !fqcn.contains(".")) {
+        if (Objects.isNull(fqcn) || !fqcn.contains(".")) {
             return fqcn;
         }
         var simpleName = simpleName(fqcn);

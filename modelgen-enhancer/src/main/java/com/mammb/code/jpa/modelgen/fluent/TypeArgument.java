@@ -44,6 +44,7 @@ public class TypeArgument {
         this.persistenceType = asPersistenceType(typeMirrorElement);
     }
 
+
     /**
      * Create the type argument.
      * @param typeMirror Type argument mirror

@@ -1,4 +1,4 @@
-package com.mammb.code.jpa.modelgen.fluent;
+package com.mammb.code.jpa.modelgen.fluent.data;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
