@@ -1,7 +1,7 @@
-package com.mammb.code.jpa.modelgen.fluent;
+package com.mammb.code.jpa.fluent.modelgen;
 
-import com.mammb.code.jpa.modelgen.fluent.data.RootEntity_Root_;
-import com.mammb.code.jpa.modelgen.fluent.data.RootImpl;
+import com.mammb.code.jpa.fluent.modelgen.data.RootEntity_Root_;
+import com.mammb.code.jpa.fluent.modelgen.data.RootImpl;
 import org.junit.jupiter.api.Test;
 
 class JpaMetaModelEnhanceProcessorTest {

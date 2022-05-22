@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mammb.code.jpa.modelgen.fluent;
+package com.mammb.code.jpa.fluent.modelgen;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.type.TypeMirror;
@@ -107,11 +107,9 @@ public class TypeArgument {
 
         return elm.getAnnotationMirrors().stream()
             .map(am -> am.getAnnotationType().toString())
-            .map(PersistenceType.mappedFqcn::get)
-            .filter(Objects::nonNull)
+            .map(PersistenceType::of)
             .findFirst()
             .orElse(PersistenceType.BASIC);
-
     }
 
 }

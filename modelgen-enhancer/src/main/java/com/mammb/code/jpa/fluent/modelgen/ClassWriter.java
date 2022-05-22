@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mammb.code.jpa.modelgen.fluent;
+package com.mammb.code.jpa.fluent.modelgen;
 
 import javax.annotation.processing.FilerException;
 import javax.tools.FileObject;
@@ -40,6 +40,8 @@ public class ClassWriter {
 
     /**
      * Constructor.
+     * @param context the context of processing
+     * @param entity the representation of static metamodel
      */
     protected ClassWriter(Context context, StaticMetamodelEntity entity) {
         this.context = context;
@@ -75,7 +77,7 @@ public class ClassWriter {
                     pw.println("package " + entity.getPackageName() + ";");
                     pw.println();
                 }
-                pw.println(importes.generateImports());
+                pw.println(importes.generateImports(context.isJakarta()));
                 pw.println();
 
                 pw.println(body);
@@ -91,6 +93,10 @@ public class ClassWriter {
     }
 
 
+    /**
+     * Generate the body of class.
+     * @return the body of class
+     */
     protected StringBuilder generateBody() {
         StringBuilder sb = new StringBuilder();
         sb.append(generateClassDeclaration()).append(System.lineSeparator());
@@ -98,6 +104,10 @@ public class ClassWriter {
     }
 
 
+    /**
+     * Generate the class declaration.
+     * @return the class declaration
+     */
     protected String generateClassDeclaration() {
         StringBuilder sb = new StringBuilder();
         if (Objects.isNull(entity.getSuperClass())) {
@@ -150,12 +160,16 @@ public class ClassWriter {
     }
 
 
+    /**
+     * Generate root methods.
+     * @param attribute the static metamodel attribute
+     * @return root methods
+     */
     protected String generateRootMethod(StaticMetamodelAttribute attribute) {
 
         if (attribute.getAttributeType().isList()) {
-            var ret = "";
             if (attribute.getValueType().isStruct()) {
-                ret = bindAttribute(attribute, """
+                return bindAttribute(attribute, """
                     public %2$s_Root_.Join_ join%3$s() {
                         return new %2$s_Root_.Join_() {
                             @Override
@@ -165,18 +179,23 @@ public class ClassWriter {
                         };
                     }
 
+                    public Expression<List<%2$s>> get%3$s() {
+                        return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
+                    }
+
+                """);
+            } else {
+                return bindAttribute(attribute, """
+                    public Expression<List<%2$s>> get%3$s() {
+                        return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
+                    }
+
                 """);
             }
-            return ret + bindAttribute(attribute, """
-                public Expression<List<%2$s>> get%3$s() {
-                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
-                }
-            """);
 
         } else if (attribute.getAttributeType().isSet()) {
-            var ret = "";
             if (attribute.getValueType().isStruct()) {
-                ret = bindAttribute(attribute, """
+                return bindAttribute(attribute, """
                     public %2$s_Root_.Join_ join%3$s() {
                         return new %2$s_Root_.Join_() {
                             @Override
@@ -186,18 +205,22 @@ public class ClassWriter {
                         };
                     }
 
+                    public Expression<Set<%2$s>> get%3$s() {
+                        return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
+                    }
+
+                """);
+            } else {
+                return bindAttribute(attribute, """
+                    public Expression<Set<%2$s>> get%3$s() {
+                        return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
+                    }
+
                 """);
             }
-            return ret + bindAttribute(attribute, """
-                public Expression<Set<%2$s>> get%3$s() {
-                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
-                }
-            """);
-
         } else if (attribute.getAttributeType().isCollection()) {
-            var ret = "";
             if (attribute.getValueType().isStruct()) {
-                ret = bindAttribute(attribute, """
+                return bindAttribute(attribute, """
                     public %2$s_Root_.Join_ join%3$s() {
                         return new %2$s_Root_.Join_() {
                             @Override
@@ -207,44 +230,53 @@ public class ClassWriter {
                         };
                     }
 
+                    public Expression<Collection<%2$s>> get%3$s() {
+                        return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
+                    }
+
+                """);
+            } else {
+                return bindAttribute(attribute, """
+                    public Expression<Collection<%2$s>> get%3$s() {
+                        return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
+                    }
+
                 """);
             }
-            return ret + bindAttribute(attribute, """
-                public Expression<Collection<%2$s>> get%3$s() {
-                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
-                }
-            """);
-
-        } else if (attribute.getAttributeType().isSingular() && attribute.getValueType().isStruct()) {
-            return bindAttribute(attribute, """
-                public %2$s_Root_.Join_ join%3$s() {
-                    return new %2$s_Root_.Join_() {
-                        @Override
-                        public Join<%1$s, %2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
-                        }
-                    };
-                }
-                public %2$s_Root_.Path_ get%3$s() {
-                    return new %2$s_Root_.Path_() {
-                        @Override
-                        public Path<%2$s> get() {
-                            return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
-                        }
-                    };
-                }
-            """);
 
         } else if (attribute.getAttributeType().isSingular()) {
-            return bindAttribute(attribute, """
-                public Path<%2$s> get%3$s() {
-                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
-                }
-            """);
-        } else if (attribute.getAttributeType().isMap()) {
-            var ret = "";
             if (attribute.getValueType().isStruct()) {
-                ret = bindMapAttribute(attribute, """
+                return bindAttribute(attribute, """
+                    public %2$s_Root_.Join_ join%3$s() {
+                        return new %2$s_Root_.Join_() {
+                            @Override
+                            public Join<%1$s, %2$s> get() {
+                                return ((Root<%1$s>) %1$s_Root_.this.get()).join(%1$s_.%4$s);
+                            }
+                        };
+                    }
+
+                    public %2$s_Root_.Path_ get%3$s() {
+                        return new %2$s_Root_.Path_() {
+                            @Override
+                            public Path<%2$s> get() {
+                                return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
+                            }
+                        };
+                    }
+
+                """);
+            }  else {
+                return bindAttribute(attribute, """
+                    public Path<%2$s> get%3$s() {
+                        return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%4$s);
+                    }
+
+                """);
+            }
+        } else if (attribute.getAttributeType().isMap()) {
+            if (attribute.getValueType().isStruct()) {
+                return bindMapAttribute(attribute, """
                     public %3$s_Root_.Join_ join%4$s() {
                         return new %3$s_Root_.Join_() {
                             @Override
@@ -254,19 +286,29 @@ public class ClassWriter {
                         };
                     }
 
+                    public Expression<Map<%2$s, %3$s>> get%4$s() {
+                        return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%5$s);
+                    }
+
+                """);
+            } else {
+                return bindMapAttribute(attribute, """
+                    public Expression<Map<%2$s, %3$s>> get%4$s() {
+                        return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%5$s);
+                    }
+
                 """);
             }
-            return ret + bindMapAttribute(attribute, """
-                public Expression<Map<%2$s, %3$s>> get%4$s() {
-                    return ((Root<%1$s>) %1$s_Root_.this.get()).get(%1$s_.%5$s);
-                }
-            """);
         } else {
             return "";
         }
     }
 
 
+    /**
+     * Generate the join class.
+     * @return generated join class
+     */
     protected String generateJoinClass() {
 
         StringBuilder sb = new StringBuilder();
@@ -300,65 +342,166 @@ public class ClassWriter {
     }
 
 
+    /**
+     * Generate join methods
+     * @param attribute attribute
+     * @return Generated join methods
+     */
     protected String generateJoinMethod(StaticMetamodelAttribute attribute) {
 
         if (attribute.getAttributeType().isList()) {
-            return bindAttribute(attribute, """
-                    public ListJoin<%1$s, %2$s> join%3$s() {
-                        return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
-                    }
-                    public Expression<List<%2$s>> get%3$s() {
-                        return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
-                    }
-            """);
+            if (attribute.getValueType().isStruct()) {
+                return bindAttribute(attribute, """
+                        public %2$s_Root_.Join_ join%3$s() {
+                            return new %2$s_Root_.Join_() {
+                                @Override
+                                public ListJoin<%1$s, %2$s> get() {
+                                    return ((Join<?, %1$s>) %1$s_Root_.Join_.this.get()).join(%1$s_.%4$s);
+                                }
+                            };
+                        }
+
+                        public Expression<List<%2$s>> get%3$s() {
+                            return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
+                        }
+
+                """);
+            } else {
+                return bindAttribute(attribute, """
+                        public ListJoin<%1$s, %2$s> join%3$s() {
+                            return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
+                        }
+
+                        public Expression<List<%2$s>> get%3$s() {
+                            return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
+                        }
+
+                """);
+            }
         } else if (attribute.getAttributeType().isSet()) {
-            return bindAttribute(attribute, """
-                    public SetJoin<%1$s, %2$s> join%3$s() {
-                        return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
-                    }
-                    public Expression<Set<%2$s>> get%3$s() {
-                        return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
-                    }
-            """);
+            if (attribute.getValueType().isStruct()) {
+                return bindAttribute(attribute, """
+                        public %2$s_Root_.Join_ join%3$s() {
+                            return new %2$s_Root_.Join_() {
+                                @Override
+                                public SetJoin<%1$s, %2$s> get() {
+                                    return ((Join<?, %1$s>) %1$s_Root_.Join_.this.get()).join(%1$s_.%4$s);
+                                }
+                            };
+                        }
+
+                        public Expression<Set<%2$s>> get%3$s() {
+                            return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
+                        }
+
+                """);
+            } else {
+                return bindAttribute(attribute, """
+                        public SetJoin<%1$s, %2$s> join%3$s() {
+                            return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
+                        }
+
+                        public Expression<Set<%2$s>> get%3$s() {
+                            return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
+                        }
+
+                """);
+            }
         } else if (attribute.getAttributeType().isCollection()) {
-            return bindAttribute(attribute, """
-                    public CollectionJoin<%1$s, %2$s> join%3$s() {
-                        return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
-                    }
-                    public Expression<Collection<%2$s>> get%3$s() {
-                        return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
-                    }
-            """);
-        } else if (attribute.getAttributeType().isSingular() && attribute.getValueType().isStruct()) {
-            return bindAttribute(attribute, """
-                    public Join<%1$s, %2$s> join%3$s() {
-                        return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
-                    }
-                    public Path<%2$s> get%3$s() {
-                        return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
-                    }
-            """);
+            if (attribute.getValueType().isStruct()) {
+                return bindAttribute(attribute, """
+                        public %2$s_Root_.Join_ join%3$s() {
+                            return new %2$s_Root_.Join_() {
+                                @Override
+                                public CollectionJoin<%1$s, %2$s> get() {
+                                    return ((Join<?, %1$s>) %1$s_Root_.Join_.this.get()).join(%1$s_.%4$s);
+                                }
+                            };
+                        }
+
+                        public Expression<Collection<%2$s>> get%3$s() {
+                            return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
+                        }
+
+                """);
+            } else {
+                return bindAttribute(attribute, """
+                        public CollectionJoin<%1$s, %2$s> join%3$s() {
+                            return ((Join<?, %1$s>) get()).join(%1$s_.%4$s);
+                        }
+                        public Expression<Collection<%2$s>> get%3$s() {
+                            return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
+                        }
+                """);
+            }
         } else if (attribute.getAttributeType().isSingular()) {
-            return bindAttribute(attribute, """
-                    public Path<%2$s> get%3$s() {
-                        return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
-                    }
-            """);
+            if (attribute.getValueType().isStruct()) {
+                return bindAttribute(attribute, """
+                        public %2$s_Root_.Join_ join%3$s() {
+                            return new %2$s_Root_.Join_() {
+                                @Override
+                                public Join<%1$s, %2$s> get() {
+                                    return ((Join<?, %1$s>) %1$s_Root_.Join_.this.get()).join(%1$s_.%4$s);
+                                }
+                            };
+                        }
+
+                        public %2$s_Root_.Path_ get%3$s() {
+                            return new %2$s_Root_.Path_() {
+                                @Override
+                                public Path<%2$s> get() {
+                                    return ((Join<?, %1$s>) %1$s_Root_.Join_.this.get()).get(%1$s_.%4$s);
+                                }
+                            };
+                        }
+
+                """);
+            } else {
+                return bindAttribute(attribute, """
+                        public Path<%2$s> get%3$s() {
+                            return ((Join<?, %1$s>) get()).get(%1$s_.%4$s);
+                        }
+                """);
+            }
         } else if (attribute.getAttributeType().isMap()) {
-            return bindMapAttribute(attribute, """
-                    public MapJoin<%1$s, %2$s, %3$s> join%4$s() {
-                        return ((Join<?, %1$s>) get()).join(%1$s_.%5$s);
-                    }
-                    public Expression<Map<%2$s, %3$s>> get%4$s() {
-                        return ((Join<?, %1$s>) get()).get(%1$s_.%5$s);
-                    }
-            """);
+            if (attribute.getValueType().isStruct()) {
+                return bindMapAttribute(attribute, """
+                        public %3$s_Root_.Join_ join%4$s() {
+                            return new %3$s_Root_.Join_() {
+                                @Override
+                                public MapJoin<%1$s, %2$s, %3$s> get() {
+                                    return ((Join<?, %1$s>) %1$s_Root_.Join_.this.get()).join(%1$s_.%5$s);
+                                }
+                            };
+                        }
+
+                        public Expression<Map<%2$s, %3$s>> get%4$s() {
+                            return ((Join<?, %1$s>) get()).get(%1$s_.%5$s);
+                        }
+
+                """);
+            } else {
+                return bindMapAttribute(attribute, """
+                        public MapJoin<%1$s, %2$s, %3$s> join%4$s() {
+                            return ((Join<?, %1$s>) get()).join(%1$s_.%5$s);
+                        }
+
+                        public Expression<Map<%2$s, %3$s>> get%4$s() {
+                            return ((Join<?, %1$s>) get()).get(%1$s_.%5$s);
+                        }
+
+                """);
+            }
         } else {
             return "";
         }
     }
 
 
+    /**
+     * Generate path class.
+     * @return Generated path class
+     */
     protected String generatePathClass() {
         StringBuilder sb = new StringBuilder();
 
@@ -391,43 +534,73 @@ public class ClassWriter {
     }
 
 
+    /**
+     * Generate path methods.
+     * @param attribute attribute
+     * @return Generated path methods
+     */
     protected String generatePathMethod(StaticMetamodelAttribute attribute) {
         if (attribute.getAttributeType().isList()) {
             return bindAttribute(attribute, """
                     public Expression<List<%2$s>> get%3$s() {
                         return ((Path<%1$s>) get()).get(%1$s_.%4$s);
                     }
+
             """);
         } else if (attribute.getAttributeType().isSet()) {
             return bindAttribute(attribute, """
                     public Expression<Set<%2$s>> get%3$s() {
                         return ((Path<%1$s>) get()).get(%1$s_.%4$s);
                     }
+
             """);
         } else if (attribute.getAttributeType().isCollection()) {
             return bindAttribute(attribute, """
                     public Expression<Collection<%2$s>> get%3$s() {
                         return ((Path<%1$s>) get()).get(%1$s_.%4$s);
                     }
+
             """);
         } else if (attribute.getAttributeType().isSingular()) {
-            return bindAttribute(attribute, """
-                    public Path<%2$s> get%3$s() {
-                        return ((Path<%1$s>) get()).get(%1$s_.%4$s);
-                    }
-            """);
+            if (attribute.getValueType().isStruct()) {
+                return bindAttribute(attribute, """
+                        public %2$s_Root_.Path_ get%3$s() {
+                            return new %2$s_Root_.Path_() {
+                                @Override
+                                public Path<%2$s> get() {
+                                    return ((Path<%1$s>) %1$s_Root_.Path_.this.get()).get(%1$s_.%4$s);
+                                }
+                            };
+                        }
+
+                """);
+            } else {
+                return bindAttribute(attribute, """
+                        public Path<%2$s> get%3$s() {
+                            return ((Path<%1$s>) get()).get(%1$s_.%4$s);
+                        }
+
+                """);
+            }
         } else if (attribute.getAttributeType().isMap()) {
             return bindMapAttribute(attribute, """
                     public Expression<Map<%2$s, %3$s>> get%4$s() {
                         return ((Path<%1$s>) get()).get(%1$s_.%5$s);
                     }
+
             """);
         } else {
             return "";
         }
-
     }
 
+
+    /**
+     * Bind attribute to template.
+     * @param attribute attribute
+     * @param template template
+     * @return Binded template
+     */
     protected String bindAttribute(StaticMetamodelAttribute attribute, String template) {
         if (attribute.getAttributeType().isMap()) {
             throw new IllegalArgumentException(attribute.getAttributeType().toString());
@@ -441,6 +614,12 @@ public class ClassWriter {
     }
 
 
+    /**
+     * Bind map attribute to template.
+     * @param attribute attribute
+     * @param template template
+     * @return Binded template
+     */
     protected String bindMapAttribute(StaticMetamodelAttribute attribute, String template) {
         if (!attribute.getAttributeType().isMap()) {
             throw new IllegalArgumentException(attribute.getAttributeType().toString());
@@ -455,6 +634,11 @@ public class ClassWriter {
     }
 
 
+    /**
+     * Capitalize the given string.
+     * @param str the given string
+     * @return Capitalized string
+     */
     protected static String capitalize(String str) {
         return (Objects.isNull(str) || str.isEmpty())
             ? str

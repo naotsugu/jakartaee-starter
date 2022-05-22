@@ -1,4 +1,4 @@
-package com.mammb.code.jpa.modelgen.fluent.data;
+package com.mammb.code.jpa.fluent.modelgen.data;
 
 import jakarta.persistence.criteria.CollectionJoin;
 import jakarta.persistence.criteria.Expression;

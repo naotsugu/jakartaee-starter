@@ -1,7 +1,6 @@
-package com.mammb.code.jpa.modelgen.fluent.data;
+package com.mammb.code.jpa.fluent.modelgen.data;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;

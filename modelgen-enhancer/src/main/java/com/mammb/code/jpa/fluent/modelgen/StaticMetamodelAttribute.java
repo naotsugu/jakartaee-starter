@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mammb.code.jpa.modelgen.fluent;
+package com.mammb.code.jpa.fluent.modelgen;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.type.DeclaredType;
@@ -42,10 +42,13 @@ public class StaticMetamodelAttribute {
 
     /**
      * Constructor.
+     * @param element the static metamodel element
+     * @param types the type utility
      */
     protected StaticMetamodelAttribute(Element element, Types types) {
 
-        if (!element.asType().toString().startsWith(AttributeType.PACKAGE_NAME)) {
+        if (!element.asType().toString().startsWith(AttributeType.PACKAGE_NAME) &&
+            !element.asType().toString().startsWith(AttributeType.PACKAGE_NAME_LEGACY)) {
             throw new IllegalArgumentException("Unsupported type : " + element.asType().toString());
         }
 

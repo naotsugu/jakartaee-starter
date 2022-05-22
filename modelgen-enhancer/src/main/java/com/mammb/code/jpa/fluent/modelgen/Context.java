@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mammb.code.jpa.modelgen.fluent;
+package com.mammb.code.jpa.fluent.modelgen;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -34,14 +34,25 @@ public class Context {
     /** Mode of debug. */
     private final boolean debug;
 
+    /** Mode of jakarta or javax. */
+    private boolean jakarta;
+
 
     /**
      * Private constructor.
      */
+
+    /**
+     * Private constructor.
+     * @param pe the annotation processing environment
+     * @param debug the mode of debug
+     */
     protected Context(ProcessingEnvironment pe, boolean debug) {
         this.pe = pe;
         this.debug = debug;
+        this.jakarta = true;
     }
+
 
     /**
      * Create the context instance.
@@ -105,6 +116,23 @@ public class Context {
      */
     public void logError(String message) {
         pe.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
+    }
+
+
+    /**
+     * Get jakarta
+     * @return jakarta
+     */
+    public boolean isJakarta() {
+        return jakarta;
+    }
+
+    /**
+     * Set jakarta
+     * @param jakarta jakarta
+     */
+    public void setJakarta(boolean jakarta) {
+        this.jakarta = jakarta;
     }
 
 }
