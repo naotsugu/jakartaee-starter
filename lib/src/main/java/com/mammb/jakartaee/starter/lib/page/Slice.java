@@ -18,22 +18,73 @@ package com.mammb.jakartaee.starter.lib.page;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A slice of data elements.
+ * @author Naotsugu Kobayashi
+ */
 public interface Slice<T> extends SlicePoint {
 
+    /**
+     * Get the content of {@link Slice} as {@link List}.
+     * @return the content of {@link Slice}
+     */
     List<T> getContent();
 
+    /**
+     * Gets whether the {@link Slice} has content.
+     * @return if the {@link Slice} has content, then {@code true}
+     */
     default boolean hasContent() {
         return Objects.nonNull(getContent()) && getContent().size() > 0;
     }
 
+    /**
+     * Get whether the next {@link Slice} exists.
+     * @return if there is a next {@link Slice}, then {@code true}
+     */
     boolean hasNext();
 
+    /**
+     * Get whether the previous {@link Slice} exists.
+     * @return if there is a previous {@link Slice}, then {@code true}
+     */
     default boolean hasPrevious() {
         return getNumber() > 0;
     }
 
-    static <T> SliceImpl<T> of(List<T> content, boolean hasNext, SlicePoint slicePoint) {
-        return new SliceImpl<>(content, hasNext, slicePoint);
-    }
+    /**
+     * Create the {@link Slice} by given arguments.
+     * @param content the content of {@link Slice}.
+     * @param hasNext whether the next slice exists
+     * @param slicePoint the current point of slice
+     * @param <T> the type of content
+     * @return the created {@link Slice}
+     */
+    static <T> Slice<T> of(List<T> content, boolean hasNext, SlicePoint slicePoint) {
 
+        return new Slice<>() {
+
+            private final List<T> list = List.copyOf(content);
+
+            @Override
+            public int getNumber() {
+                return slicePoint.getNumber();
+            }
+
+            @Override
+            public int getSize() {
+                return slicePoint.getSize();
+            }
+
+            @Override
+            public List<T> getContent() {
+                return list;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return hasNext;
+            }
+        };
+    }
 }

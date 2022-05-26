@@ -15,12 +15,29 @@
  */
 package com.mammb.jakartaee.starter.lib.page;
 
+/**
+ * The current point of slice.
+ * @author Naotsugu Kobayashi
+ */
 public interface SlicePoint {
 
+    /**
+     * Get the number of the current {@link SlicePoint}.
+     * This number is zero-origin.
+     * @return the number of the current {@link SlicePoint}.
+     */
     int getNumber();
 
+    /**
+     * Get the size of slice.
+     * @return the size of slice.
+     */
     int getSize();
 
+    /**
+     * Get the offset index from the first element.
+     * @return the offset index from the first element
+     */
     default long getOffset() {
         return (long) getNumber() * (long) getSize();
     }

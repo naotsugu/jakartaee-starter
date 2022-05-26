@@ -25,8 +25,36 @@ public interface Page<T> extends Slice<T> {
         return getSize() == 0 ? 1 : (int) Math.ceil((double) getTotalElements() / (double) getSize());
     }
 
-    static <T> Page<T> of(List<T> content, long totalElements, SlicePoint slicePoint) {
-        return new PageImpl<>(content, totalElements, slicePoint);
+    default boolean hasNext() {
+        return getNumber() + 1 < getTotalPages();
     }
 
+    static <T> Page<T> of(List<T> content, long totalElements, SlicePoint slicePoint) {
+
+        return new Page<>() {
+
+            private final List<T> list = List.copyOf(content);
+
+            @Override
+            public long getTotalElements() {
+                return totalElements;
+            }
+
+            @Override
+            public List<T> getContent() {
+                return list;
+            }
+
+            @Override
+            public int getNumber() {
+                return slicePoint.getNumber();
+            }
+
+            @Override
+            public int getSize() {
+                return slicePoint.getSize();
+            }
+
+        };
+    }
 }
