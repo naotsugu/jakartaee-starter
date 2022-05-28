@@ -15,8 +15,6 @@
  */
 package com.mammb.jakartaee.starter.lib.page;
 
-import com.mammb.jakartaee.starter.lib.sort.SortSpec;
-
 import java.util.Objects;
 
 public class SliceRequestImpl<T> implements SliceRequest<T> {

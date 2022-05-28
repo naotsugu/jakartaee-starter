@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mammb.jakartaee.starter.lib.sort;
+package com.mammb.jakartaee.starter.lib.page;
 
 public interface Sortable<T> {
     SortSpec<T> getSortSpec();

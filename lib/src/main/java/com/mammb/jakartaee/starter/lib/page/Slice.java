@@ -64,7 +64,7 @@ public interface Slice<T> extends SlicePoint {
 
         return new Slice<>() {
 
-            private final List<T> list = List.copyOf(content);
+            private final List<T> list = Objects.isNull(content) ? List.of() : List.copyOf(content);
 
             @Override
             public int getNumber() {

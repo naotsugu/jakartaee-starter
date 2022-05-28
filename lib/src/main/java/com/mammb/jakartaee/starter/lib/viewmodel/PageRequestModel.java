@@ -16,7 +16,7 @@
 package com.mammb.jakartaee.starter.lib.viewmodel;
 
 import com.mammb.jakartaee.starter.lib.page.SliceRequest;
-import com.mammb.jakartaee.starter.lib.sort.SortSpec;
+import com.mammb.jakartaee.starter.lib.page.SortSpec;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 

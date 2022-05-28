@@ -15,7 +15,7 @@
  */
 package com.mammb.jakartaee.starter.lib.repository;
 
-import com.mammb.jakartaee.starter.lib.sort.SortSpec;
+import com.mammb.jakartaee.starter.lib.page.SortSpec;
 import com.mammb.jakartaee.starter.lib.criteria.Specification;
 
 import java.io.Serializable;

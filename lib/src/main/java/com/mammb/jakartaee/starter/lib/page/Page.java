@@ -16,24 +16,46 @@
 package com.mammb.jakartaee.starter.lib.page;
 
 import java.util.List;
+import java.util.Objects;
 
 public interface Page<T> extends Slice<T> {
 
+    /**
+     * Get the total amount of elements.
+     * @return the total amount of elements
+     */
     long getTotalElements();
 
+    /**
+     * Get the number of total pages.
+     * @return the number of total pages
+     */
     default int getTotalPages() {
         return getSize() == 0 ? 1 : (int) Math.ceil((double) getTotalElements() / (double) getSize());
     }
 
+    /**
+     * Get whether the next {@link Page} exists.
+     * @return if there is a next {@link Page}, then {@code true}
+     */
+    @Override
     default boolean hasNext() {
         return getNumber() + 1 < getTotalPages();
     }
 
+    /**
+     * Create the {@link Page} by given arguments.
+     * @param content the content of {@link Page}.
+     * @param totalElements the total amount of elements
+     * @param slicePoint the current point of slice
+     * @param <T> the type of content
+     * @return the created {@link Page}
+     */
     static <T> Page<T> of(List<T> content, long totalElements, SlicePoint slicePoint) {
 
         return new Page<>() {
 
-            private final List<T> list = List.copyOf(content);
+            private final List<T> list = Objects.isNull(content) ? List.of() : List.copyOf(content);
 
             @Override
             public long getTotalElements() {

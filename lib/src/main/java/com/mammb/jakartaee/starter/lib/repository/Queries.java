@@ -16,8 +16,8 @@
 package com.mammb.jakartaee.starter.lib.repository;
 
 import com.mammb.jakartaee.starter.lib.criteria.Criteria;
-import com.mammb.jakartaee.starter.lib.sort.SortContext;
-import com.mammb.jakartaee.starter.lib.sort.SortSpec;
+import com.mammb.jakartaee.starter.lib.page.SortContext;
+import com.mammb.jakartaee.starter.lib.page.SortSpec;
 import com.mammb.jakartaee.starter.lib.criteria.Specification;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;

@@ -1,6 +1,6 @@
 package com.mammb.jakartaee.starter.domail.example.paging;
 
-import com.mammb.jakartaee.starter.lib.sort.SortSpec;
+import com.mammb.jakartaee.starter.lib.page.SortSpec;
 import com.mammb.jakartaee.starter.lib.criteria.Specification;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Root;
