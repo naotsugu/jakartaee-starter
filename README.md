@@ -92,4 +92,5 @@ For more information of persistence definition, see `DataSourceInitializer.java`
 |File Upload| File Upload Download example. See `UploadFileModel.java`                |
 |Simple Web Socket| Simple WebSocket endpoint example. See `WebSocketEndPoint.java`       |
 |CDI Event| CDI Event example. See `CdiEventService.java` `CdiEventObserver.java` |
+|JPA Entity Metamodel| JPA Entity MetaModel information. See `EntityMetaService.java` `Table.java` |
 
