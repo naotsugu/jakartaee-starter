@@ -22,11 +22,12 @@ import java.util.Objects;
 
 public interface Specification<T> extends Serializable {
 
+
     Predicate toPredicate(Criteria<T> context);
 
     static <T> Specification<T> not(Specification<T> spec) {
         return Objects.isNull(spec)
-            ? context -> null
+            ? criteria -> null
             : context -> context.builder().not(spec.toPredicate(context));
     }
 

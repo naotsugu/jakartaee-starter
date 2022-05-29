@@ -30,6 +30,7 @@ public interface Slice<T> extends SlicePoint {
      */
     List<T> getContent();
 
+
     /**
      * Gets whether the {@link Slice} has content.
      * @return if the {@link Slice} has content, then {@code true}
@@ -38,11 +39,13 @@ public interface Slice<T> extends SlicePoint {
         return Objects.nonNull(getContent()) && getContent().size() > 0;
     }
 
+
     /**
      * Get whether the next {@link Slice} exists.
      * @return if there is a next {@link Slice}, then {@code true}
      */
     boolean hasNext();
+
 
     /**
      * Get whether the previous {@link Slice} exists.
@@ -51,6 +54,7 @@ public interface Slice<T> extends SlicePoint {
     default boolean hasPrevious() {
         return getNumber() > 0;
     }
+
 
     /**
      * Create the {@link Slice} by given arguments.
@@ -87,4 +91,5 @@ public interface Slice<T> extends SlicePoint {
             }
         };
     }
+
 }

@@ -16,5 +16,7 @@
 package com.mammb.jakartaee.starter.lib.page;
 
 public interface Sortable<T> {
+
     SortSpec<T> getSortSpec();
+
 }

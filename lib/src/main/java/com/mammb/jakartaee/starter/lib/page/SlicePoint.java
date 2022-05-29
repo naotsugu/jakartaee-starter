@@ -28,11 +28,13 @@ public interface SlicePoint {
      */
     int getNumber();
 
+
     /**
      * Get the size of slice.
      * @return the size of slice.
      */
     int getSize();
+
 
     /**
      * Get the offset index from the first element.

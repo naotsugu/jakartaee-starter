@@ -18,6 +18,12 @@ package com.mammb.jakartaee.starter.lib.page;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Abstract interface for page.
+ *
+ * @param <T> the type of page element
+ * @author Naotsugu Kobayashi
+ */
 public interface Page<T> extends Slice<T> {
 
     /**
@@ -25,6 +31,7 @@ public interface Page<T> extends Slice<T> {
      * @return the total amount of elements
      */
     long getTotalElements();
+
 
     /**
      * Get the number of total pages.
@@ -34,6 +41,7 @@ public interface Page<T> extends Slice<T> {
         return getSize() == 0 ? 1 : (int) Math.ceil((double) getTotalElements() / (double) getSize());
     }
 
+
     /**
      * Get whether the next {@link Page} exists.
      * @return if there is a next {@link Page}, then {@code true}
@@ -42,6 +50,7 @@ public interface Page<T> extends Slice<T> {
     default boolean hasNext() {
         return getNumber() + 1 < getTotalPages();
     }
+
 
     /**
      * Create the {@link Page} by given arguments.
@@ -79,4 +88,5 @@ public interface Page<T> extends Slice<T> {
 
         };
     }
+
 }
