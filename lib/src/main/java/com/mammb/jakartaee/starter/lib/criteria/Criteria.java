@@ -19,6 +19,8 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
+import java.util.function.Function;
+
 public interface Criteria<T> extends CriteriaQueryContext<T>,
     EqTrait<T>, LikeTrait<T>, PartialLikeTrait<T>,
     GtTrait<T>, LtTrait<T>, BetweenTrait<T>,
@@ -42,6 +44,11 @@ public interface Criteria<T> extends CriteriaQueryContext<T>,
             @Override
             public CriteriaBuilder builder() {
                 return builder;
+            }
+
+            @Override
+            public <R> R on(Function<Root<T>, R> fn) {
+                return fn.apply(root());
             }
         };
     }

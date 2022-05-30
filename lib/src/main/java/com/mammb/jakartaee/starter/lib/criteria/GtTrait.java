@@ -23,6 +23,9 @@ import java.util.function.Function;
 
 public interface GtTrait<T> extends CriteriaContext<T> {
 
+    default <T1 extends Comparable<? super T1>> Predicate gt(Expression<? extends T1> exp, T1 value) {
+        return isEmpty(value) ? null : builder().greaterThan(exp, value);
+    }
     default <T1 extends Comparable<? super T1>> Predicate gt(Function<Root<T>, Expression<? extends T1>> exp, T1 value) {
         return isEmpty(value) ? null : builder().greaterThan(exp.apply(root()), value);
     }
@@ -33,6 +36,10 @@ public interface GtTrait<T> extends CriteriaContext<T> {
         return isEmpty(value) ? null : builder().gt(exp.apply(root()), value);
     }
 
+
+    default <T1 extends Comparable<? super T1>> Predicate ge(Expression<? extends T1> exp, T1 value) {
+        return isEmpty(value) ? null : builder().greaterThanOrEqualTo(exp, value);
+    }
     default <T1 extends Comparable<? super T1>> Predicate ge(Function<Root<T>, Expression<? extends T1>> exp, T1 value) {
         return isEmpty(value) ? null : builder().greaterThanOrEqualTo(exp.apply(root()), value);
     }

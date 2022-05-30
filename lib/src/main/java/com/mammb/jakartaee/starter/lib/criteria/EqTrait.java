@@ -29,6 +29,10 @@ public interface EqTrait<T> extends CriteriaContext<T> {
         return isEmpty(value) ? null : builder().equal(path, value);
     }
 
+    default Predicate eq(Expression<?> exp, Object value) {
+        return isEmpty(value) ? null : builder().equal(exp, value);
+    }
+
     default <T1> Predicate eq(SingularAttribute<? super T, T1> attr1, T1 value) {
         return isEmpty(value) ? null : builder().equal(root().get(attr1), value);
     }

@@ -18,10 +18,14 @@ package com.mammb.jakartaee.starter.lib.criteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Root;
 
+import java.util.function.Function;
+
 public interface CriteriaContext<T> {
 
     Root<T> root();
 
     CriteriaBuilder builder();
+
+    <R> R on(Function<Root<T>, R> fn);
 
 }
