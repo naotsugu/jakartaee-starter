@@ -40,6 +40,7 @@ public interface SortContext<T> extends CriteriaContext<T> {
             public CriteriaBuilder builder() {
                 return builder;
             }
+
         };
     }
 

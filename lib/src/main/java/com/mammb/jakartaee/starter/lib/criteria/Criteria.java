@@ -46,10 +46,6 @@ public interface Criteria<T> extends CriteriaQueryContext<T>,
                 return builder;
             }
 
-            @Override
-            public <R> R on(Function<Root<T>, R> fn) {
-                return fn.apply(root());
-            }
         };
     }
 }

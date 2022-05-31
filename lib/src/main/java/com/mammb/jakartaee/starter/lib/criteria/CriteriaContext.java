@@ -26,6 +26,8 @@ public interface CriteriaContext<T> {
 
     CriteriaBuilder builder();
 
-    <R> R on(Function<Root<T>, R> fn);
+    default <R> R on(Function<Root<T>, R> fn) {
+        return fn.apply(root());
+    }
 
 }
