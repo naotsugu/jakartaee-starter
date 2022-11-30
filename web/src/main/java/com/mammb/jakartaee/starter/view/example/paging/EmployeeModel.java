@@ -1,8 +1,9 @@
 package com.mammb.jakartaee.starter.view.example.paging;
 
 import com.mammb.jakartaee.starter.app.example.paging.EmployeeQueryRepository;
+import com.mammb.jakartaee.starter.domail.example.paging.Department_;
 import com.mammb.jakartaee.starter.domail.example.paging.Employee;
-import com.mammb.jakartaee.starter.domail.example.paging.EmployeeSpec;
+import com.mammb.jakartaee.starter.domail.example.paging.Employee_;
 import com.mammb.jakartaee.starter.lib.page.Slice;
 import com.mammb.jakartaee.starter.lib.viewmodel.PageDataModel;
 import com.mammb.jakartaee.starter.lib.viewmodel.PageRequestModel;
@@ -28,14 +29,15 @@ public class EmployeeModel implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        request = PageRequestModel.of(EmployeeSpec.nameAsc().and(EmployeeSpec.idAsc()));
+        request = PageRequestModel.of();
         page = PageDataModel.of(this::find);
     }
 
     Slice<Employee> find(int page) {
         request.setNumber(page);
-        return repository.findPage(request,
-            EmployeeSpec.nameLike(name).and(EmployeeSpec.deptNameLike(deptName)));
+        return repository.findPage(request, ctx ->
+            ctx.and(ctx.eq(ctx.root().get(Employee_.name), name),
+            ctx.like(ctx.root().get(Employee_.department).get(Department_.name), deptName)));
     }
 
     public void find() {
