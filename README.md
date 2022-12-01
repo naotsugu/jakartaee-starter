@@ -6,11 +6,17 @@
 
 # Jakarta EE Starter
 
-This is a scaffolding application based on Jakarta EE 9.1.
+This is a scaffolding application based on Jakarta EE 10 (on Payara 6).
 
 When starting a Jakarta EE project, it is time-consuming to build the environment. With this project, you can start your Jakarta EE project immediately. And provide some example application implementations.
 
 The application only depends on the Jakarta EE API.
+
+
+## Other versions
+
+* [Jakarta EE 9.1](https://github.com/naotsugu/jakartaee-starter/tree/jakarta-ee-9) on Glassfish 6
+
 
 
 ## Usage

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:jsf="http://xmlns.jcp.org/jsf">
+      xmlns:faces="jakarta.faces"
+      xmlns:h="jakarta.faces.html">
 
-<head jsf:id="idHead">
+<head faces:id="idHead">
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="format-detection" content="email=no,telephone=no,address=no" />
@@ -13,17 +13,17 @@
     <title>Login</title>
 </head>
 
-<body jsf:id="idBody">
+<body faces:id="idBody">
     <div id="container" style="margin: 2em;">
         <div id="content">
             <h2>Login to continue</h2>
-            <form jsf:id="form">
+            <form faces:id="form">
                 <h:messages styleClass="text-danger" globalOnly="true" />
                 <div class="row mb-3">
                     <div class="col-3">
-                        <label jsf:for="idUsername" class="form-label">Username</label>
+                        <label faces:for="idUsername" class="form-label">Username</label>
                         <input type="text" class="form-control #{component.valid ? '' : 'is-invalid'}"
-                               jsf:id="idUsername" jsf:value="#{loginModel.username}"/>
+                               faces:id="idUsername" faces:value="#{loginModel.username}"/>
                         <div class="invalid-feedback">
                             <h:messages for="idUsername" errorClass="invalid" />
                         </div>
@@ -31,9 +31,9 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-3">
-                        <label jsf:for="idPassword" class="form-label">Password</label>
+                        <label faces:for="idPassword" class="form-label">Password</label>
                         <input type="password" class="form-control #{component.valid ? '' : 'is-invalid'}"
-                               jsf:id="idPassword" jsf:value="#{loginModel.password}"/>
+                               faces:id="idPassword" faces:value="#{loginModel.password}"/>
                         <div class="invalid-feedback">
                             <h:messages for="idPassword" errorClass="invalid" />
                         </div>
@@ -42,8 +42,8 @@
                 <div class="row mb-3">
                     <div class="col">
                         <button type="submit" class="btn btn-primary"
-                               jsf:action="#{loginModel.login}"
-                               jsf:update="@form">
+                                faces:action="#{loginModel.login}"
+                                faces:update="@form">
                             Login
                         </button>
                     </div>

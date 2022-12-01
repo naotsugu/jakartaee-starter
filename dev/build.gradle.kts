@@ -6,8 +6,9 @@ plugins {
 }
 
 dependencies {
-    implementation("org.glassfish.main.extras:glassfish-embedded-all:6.2.5")
-    implementation("com.h2database:h2:2.1.212")
+    implementation("fish.payara.extras:payara-embedded-all:6.2022.1")
+    //implementation("org.glassfish.main.extras:glassfish-embedded-all:6.2.5")
+    //implementation("com.h2database:h2:2.1.212")
 }
 
 
@@ -37,6 +38,9 @@ application {
 
     applicationDefaultJvmArgs += listOf(
         "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+        "--add-opens", "java.base/java.net=ALL-UNNAMED",
+        "--add-opens", "java.base/java.io=ALL-UNNAMED",
+        "--add-opens", "java.base/sun.net.www.protocol.jar=ALL-UNNAMED",
         "-Duser.language=en",
         "-Denv=dev",  // development mode
         "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005")

@@ -69,16 +69,7 @@ public class EmbeddedFish {
 
     public void reDeploy() throws Exception {
         undeploy();
-        for (int i = 0; i < 5; i++) {
-            // workaround : Keys cannot be duplicate. Old value of this key property, null will be retained
-            var ret = deploy(deployedSource);
-            if (Objects.nonNull(ret)) {
-                log.info("#### Complete redeploy.[" + ret + "]");
-                break;
-            }
-            Thread.sleep(500);
-            log.info("#### Waiting redeploy.[" + i + "]");
-        }
+        deploy(deployedSource);
     }
 
 

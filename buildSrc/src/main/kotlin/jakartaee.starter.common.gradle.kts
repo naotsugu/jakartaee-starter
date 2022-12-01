@@ -12,7 +12,6 @@ tasks.withType<JavaCompile> {
 
 java {
     toolchain {
-        // glassfish 6.2.5 supports java 17
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
@@ -20,7 +19,7 @@ java {
 dependencies {
     constraints {
         // Define dependency versions as constraints
-        implementation("jakarta.platform:jakarta.jakartaee-api:9.1.0")
+        implementation("jakarta.platform:jakarta.jakartaee-api:10.0.0")
     }
     // Use JUnit Jupiter for testing.
     testImplementation(platform("org.junit:junit-bom:5.8.2"))

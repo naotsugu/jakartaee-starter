@@ -4,6 +4,7 @@ import com.mammb.jakartaee.starter.app.example.paging.EmployeeQueryRepository;
 import com.mammb.jakartaee.starter.domail.example.paging.Department_;
 import com.mammb.jakartaee.starter.domail.example.paging.Employee;
 import com.mammb.jakartaee.starter.domail.example.paging.Employee_;
+import com.mammb.jakartaee.starter.lib.criteria.Specification;
 import com.mammb.jakartaee.starter.lib.page.Slice;
 import com.mammb.jakartaee.starter.lib.viewmodel.PageDataModel;
 import com.mammb.jakartaee.starter.lib.viewmodel.PageRequestModel;
@@ -35,9 +36,9 @@ public class EmployeeModel implements Serializable {
 
     Slice<Employee> find(int page) {
         request.setNumber(page);
-        return repository.findPage(request, ctx ->
-            ctx.and(ctx.eq(ctx.root().get(Employee_.name), name),
-            ctx.like(ctx.root().get(Employee_.department).get(Department_.name), deptName)));
+        return repository.findPage(request, Specification
+                .<Employee>where(ctx -> ctx.eq(ctx.root().get(Employee_.name), name))
+                .and(ctx -> ctx.like(ctx.root().get(Employee_.department).get(Department_.name), deptName)));
     }
 
     public void find() {
