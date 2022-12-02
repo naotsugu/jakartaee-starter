@@ -29,6 +29,10 @@ $ ./gradlew run
 
 This application uses Java17. If not installed, Gradle's toolchain support will automatically install Java17.
 
+Once the application is launched, the browser starts and the index page is displayed.
+
+![index-page](doc/images/index-page.png)
+
 To exit the application, press `Ctrl + C`.
 
 
@@ -51,8 +55,8 @@ By default, WAR files are handled. If you want to use the EAR module, change the
 
 ```kotlin
 rootProject.name = "jakartaee-starter"
-// include("domain", "app", "web", "dev", "modelgen-enhancer")
-include("domain", "app", "web", "ear", "dev", "modelgen-enhancer")
+// include("domain", "app", "web", "dev")
+include("domain", "app", "web", "ear", "dev")
 ```
 
 With the above change, EAR files will be handled. However, some CDI examples will no longer work.
